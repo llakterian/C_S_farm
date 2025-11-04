@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from app.database import get_session
-from app.models import MonthlyPayroll, TeaPlucking, Staff, FertilizerTransaction, Factory
+from app.models import MonthlyPayroll, TeaPlucking, Staff, WorkerAdvance, Factory
 from typing import List
 from datetime import datetime
 from sqlalchemy import func, and_
@@ -55,38 +55,42 @@ def calculate_monthly_payroll(month: int, year: int, session: Session = Depends(
         
         # Calculate totals
         total_kg = sum(record.quantity for record in tea_records)
-        gross_earnings = sum(record.net_amount or 0 for record in tea_records)
+        gross_earnings = sum(record.worker_payment or 0 for record in tea_records)
         
-        # Get fertilizer deductions for this worker this month
-        fertilizer_deductions = session.exec(
-            select(FertilizerTransaction).where(
+        # Get advances for this worker this month (that haven't been deducted yet)
+        advances = session.exec(
+            select(WorkerAdvance).where(
                 and_(
-                    FertilizerTransaction.worker_id == worker.id,
-                    FertilizerTransaction.status == "pending",
-                    FertilizerTransaction.deduction_type == "monthly"
+                    WorkerAdvance.worker_id == worker.id,
+                    WorkerAdvance.month == month,
+                    WorkerAdvance.year == year,
+                    WorkerAdvance.deducted == False
                 )
             )
         ).all()
         
-        fertilizer_total = sum(f.total_cost for f in fertilizer_deductions)
+        total_advances = sum(a.amount for a in advances)
         
         # Calculate net pay
-        total_deductions = fertilizer_total
-        net_pay = gross_earnings - total_deductions
+        net_pay = gross_earnings - total_advances
         
         # Create payroll record
         payroll = MonthlyPayroll(
             worker_id=worker.id,
             month=month,
             year=year,
-            total_kg_plucked=total_kg,
+            total_kg=total_kg,
             gross_earnings=gross_earnings,
-            fertilizer_deduction=fertilizer_total,
-            other_deductions=0,
-            total_deductions=total_deductions,
+            total_advances=total_advances,
             net_pay=net_pay,
-            paid=False
+            paid=False,
+            created_at=datetime.now()
         )
+        
+        # Mark advances as deducted
+        for advance in advances:
+            advance.deducted = True
+            session.add(advance)
         
         session.add(payroll)
         payroll_records.append(payroll)
@@ -179,10 +183,10 @@ def get_payroll_summary(month: int, year: int, session: Session = Depends(get_se
         "month": month,
         "year": year,
         "total_workers": len(payrolls),
-        "total_kg_plucked": sum(p.total_kg_plucked for p in payrolls),
-        "total_gross_earnings": sum(p.gross_earnings for p in payrolls),
-        "total_deductions": sum(p.total_deductions for p in payrolls),
-        "total_net_pay": sum(p.net_pay for p in payrolls),
+        "total_kg": sum(p.total_kg for p in payrolls),
+        "total_gross": sum(p.gross_earnings for p in payrolls),
+        "total_advances": sum(p.total_advances for p in payrolls),
+        "total_net": sum(p.net_pay for p in payrolls),
         "workers_paid": sum(1 for p in payrolls if p.paid),
         "workers_unpaid": sum(1 for p in payrolls if not p.paid)
     }

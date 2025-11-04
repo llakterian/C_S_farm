@@ -4,96 +4,131 @@ import axios from 'axios'
 const API_BASE = 'http://localhost:8000'
 
 export default function Dogs() {
-  const [dogs, setDogs] = useState([])
-  const [litters, setLitters] = useState([])
-  const [dogForm, setDogForm] = useState({ name: '', breed: '', gender: '', dob: '', status: 'on_farm' })
-  const [litterForm, setLitterForm] = useState({ mother_id: '', father_id: '', date_of_birth: '', puppies_count: 0 })
+  const [records, setRecords] = useState([])
+  const [form, setForm] = useState({ type: 'feeding', quantity: 0, date: '', notes: '' })
+  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchDogs()
-    fetchLitters()
-  }, [])
+  useEffect(() => { fetchRecords() }, [])
 
-  const fetchDogs = async () => {
+  const fetchRecords = async () => {
+    setLoading(true)
     try {
-      const res = await axios.get(`${API_BASE}/dogs/dogs`)
-      setDogs(res.data)
+      const res = await axios.get(`${API_BASE}/dogs/`)
+      setRecords(res.data)
     } catch (error) {
-      console.error('Error fetching dogs:', error)
+      console.error('Error fetching dog records:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const fetchLitters = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/dogs/litters`)
-      setLitters(res.data)
-    } catch (error) {
-      console.error('Error fetching litters:', error)
-    }
-  }
-
-  const handleDogSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.post(`${API_BASE}/dogs/dogs`, dogForm)
-      setDogForm({ name: '', breed: '', gender: '', dob: '', status: 'on_farm' })
-      fetchDogs()
+      await axios.post(`${API_BASE}/dogs/`, {
+        ...form,
+        quantity: parseFloat(form.quantity),
+        date: form.date ? new Date(form.date).toISOString() : new Date().toISOString()
+      })
+      setForm({ type: 'feeding', quantity: 0, date: '', notes: '' })
+      fetchRecords()
+      alert('Dog record added successfully!')
     } catch (error) {
-      console.error('Error adding dog:', error)
+      console.error('Error adding record:', error)
     }
   }
 
-  const handleLitterSubmit = async (e) => {
-    e.preventDefault()
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this record?')) return
     try {
-      await axios.post(`${API_BASE}/dogs/litters`, litterForm)
-      setLitterForm({ mother_id: '', father_id: '', date_of_birth: '', puppies_count: 0 })
-      fetchLitters()
+      await axios.delete(`${API_BASE}/dogs/${id}`)
+      fetchRecords()
     } catch (error) {
-      console.error('Error adding litter:', error)
+      console.error('Error deleting record:', error)
     }
   }
+
+  if (loading) return <div className="farm-loading">Loading dog records...</div>
 
   return (
-    <div style={{padding:20}}>
-      <h1>Dogs Management</h1>
-      
-      <h2>Dogs</h2>
-      <ul>
-        {dogs.map(d => (
-          <li key={d.id}>{d.name} - {d.breed} - {d.gender} - Status: {d.status}</li>
-        ))}
-      </ul>
-      <form onSubmit={handleDogSubmit}>
-        <input type="text" placeholder="Name" value={dogForm.name} onChange={e => setDogForm({...dogForm, name: e.target.value})} required />
-        <input type="text" placeholder="Breed" value={dogForm.breed} onChange={e => setDogForm({...dogForm, breed: e.target.value})} />
-        <select value={dogForm.gender} onChange={e => setDogForm({...dogForm, gender: e.target.value})}>
-          <option value="">Select Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-        <input type="date" value={dogForm.dob} onChange={e => setDogForm({...dogForm, dob: e.target.value})} />
-        <select value={dogForm.status} onChange={e => setDogForm({...dogForm, status: e.target.value})}>
-          <option value="on_farm">On Farm</option>
-          <option value="sold">Sold</option>
-          <option value="deceased">Deceased</option>
-        </select>
-        <button type="submit">Add Dog</button>
-      </form>
+    <div className="farm-fade-in">
+      <div className="farm-page-header">
+        <h1>🐕 Dog Management</h1>
+        <p>Track guard dog activities and care</p>
+      </div>
 
-      <h2>Litters</h2>
-      <ul>
-        {litters.map(l => (
-          <li key={l.id}>Mother {l.mother_id} - {l.date_of_birth} - Puppies: {l.puppies_count}</li>
-        ))}
-      </ul>
-      <form onSubmit={handleLitterSubmit}>
-        <input type="number" placeholder="Mother ID" value={litterForm.mother_id} onChange={e => setLitterForm({...litterForm, mother_id: parseInt(e.target.value)})} required />
-        <input type="number" placeholder="Father ID" value={litterForm.father_id} onChange={e => setLitterForm({...litterForm, father_id: parseInt(e.target.value) || ''})} />
-        <input type="date" value={litterForm.date_of_birth} onChange={e => setLitterForm({...litterForm, date_of_birth: e.target.value})} required />
-        <input type="number" placeholder="Puppies Count" value={litterForm.puppies_count} onChange={e => setLitterForm({...litterForm, puppies_count: parseInt(e.target.value)})} required />
-        <button type="submit">Add Litter</button>
-      </form>
+      <div className="farm-summary-grid">
+        <div className="farm-summary-box">
+          <div className="farm-summary-title">Total Records</div>
+          <div className="farm-summary-value">{records.length}</div>
+          <div className="farm-summary-label">All activities</div>
+        </div>
+      </div>
+
+      <div className="farm-card">
+        <div className="farm-card-header">
+          <h2 className="farm-card-title">➕ Add Dog Activity</h2>
+        </div>
+        <form onSubmit={handleSubmit} className="farm-form">
+          <div className="farm-form-group">
+            <label className="farm-form-label">Type</label>
+            <select className="farm-select" value={form.type} onChange={e => setForm({...form, type: e.target.value})}>
+              <option value="feeding">Feeding</option>
+              <option value="vet">Veterinary Visit</option>
+              <option value="training">Training</option>
+              <option value="grooming">Grooming</option>
+            </select>
+          </div>
+          <div className="farm-form-group">
+            <label className="farm-form-label">Quantity/Cost</label>
+            <input className="farm-input" type="number" step="0.1" value={form.quantity} onChange={e => setForm({...form, quantity: e.target.value})} required />
+          </div>
+          <div className="farm-form-group">
+            <label className="farm-form-label">Date</label>
+            <input className="farm-input" type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} />
+          </div>
+          <div className="farm-form-group" style={{gridColumn: '1 / -1'}}>
+            <label className="farm-form-label">Notes</label>
+            <input className="farm-input" type="text" value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} />
+          </div>
+          <div style={{gridColumn: '1 / -1'}}>
+            <button type="submit" className="farm-btn farm-btn-primary">➕ Add Record</button>
+          </div>
+        </form>
+      </div>
+
+      <div className="farm-card">
+        <div className="farm-card-header">
+          <h2 className="farm-card-title">📋 Dog Records</h2>
+        </div>
+        {records.length === 0 ? (
+          <div className="farm-empty-state">
+            <div className="farm-empty-icon">🐕</div>
+            <p>No dog records yet.</p>
+          </div>
+        ) : (
+          <div style={{overflowX: 'auto'}}>
+            <table className="farm-table">
+              <thead>
+                <tr><th>Date</th><th>Type</th><th>Amount</th><th>Notes</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                {records.map(r => (
+                  <tr key={r.id}>
+                    <td>{new Date(r.date).toLocaleDateString()}</td>
+                    <td><span className="farm-badge farm-badge-warning">{r.type}</span></td>
+                    <td><strong>{r.quantity}</strong></td>
+                    <td>{r.notes || '-'}</td>
+                    <td>
+                      <button onClick={() => handleDelete(r.id)} className="farm-btn farm-btn-danger" style={{padding: '0.4rem 0.8rem'}}>🗑️</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

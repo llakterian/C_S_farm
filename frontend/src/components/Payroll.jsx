@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 const API_BASE = 'http://localhost:8000'
 
@@ -44,6 +46,106 @@ export default function Payroll() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const exportPayrollPDF = () => {
+    const doc = new jsPDF()
+    
+    // Add title
+    doc.setFontSize(20)
+    doc.text('C. SAMBU FARM', 105, 15, { align: 'center' })
+    doc.setFontSize(16)
+    doc.text(`Monthly Payroll Report`, 105, 25, { align: 'center' })
+    doc.setFontSize(12)
+    doc.text(`${months[month - 1]} ${year}`, 105, 32, { align: 'center' })
+    
+    // Add summary
+    doc.setFontSize(10)
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 40)
+    
+    if (summary) {
+      doc.text(`Total Workers: ${summary.total_workers}`, 14, 46)
+      doc.text(`Total Production: ${summary.total_kg?.toFixed(1) || 0} kg`, 14, 52)
+      doc.text(`Gross Earnings: KES ${summary.total_gross?.toFixed(2) || 0}`, 14, 58)
+      doc.text(`Advances: KES ${summary.total_advances?.toFixed(2) || 0}`, 14, 64)
+      doc.text(`Net Payroll: KES ${summary.total_net?.toFixed(2) || 0}`, 14, 70)
+    }
+    
+    // Add table
+    const tableData = payroll.map(p => [
+      `#${p.worker_id}`,
+      `${p.total_kg?.toFixed(1) || 0} kg`,
+      `KES ${p.gross_earnings?.toFixed(2) || 0}`,
+      `KES ${p.total_advances?.toFixed(2) || 0}`,
+      `KES ${p.net_pay?.toFixed(2) || 0}`
+    ])
+    
+    doc.autoTable({
+      startY: 80,
+      head: [['Worker ID', 'Quantity', 'Gross', 'Advances', 'Net Pay']],
+      body: tableData,
+      foot: [[
+        'TOTALS',
+        `${payroll.reduce((sum, p) => sum + (p.total_kg || 0), 0).toFixed(1)} kg`,
+        `KES ${payroll.reduce((sum, p) => sum + (p.gross_earnings || 0), 0).toFixed(2)}`,
+        `KES ${payroll.reduce((sum, p) => sum + (p.total_advances || 0), 0).toFixed(2)}`,
+        `KES ${payroll.reduce((sum, p) => sum + (p.net_pay || 0), 0).toFixed(2)}`
+      ]],
+      theme: 'grid',
+      headStyles: { fillColor: [45, 80, 22] },
+      footStyles: { fillColor: [245, 241, 232], textColor: [0, 0, 0], fontStyle: 'bold' }
+    })
+    
+    doc.save(`payroll_${months[month - 1]}_${year}.pdf`)
+  }
+
+  const exportIndividualSlip = (worker) => {
+    const doc = new jsPDF()
+    
+    // Add header
+    doc.setFontSize(18)
+    doc.text('C. SAMBU FARM', 105, 20, { align: 'center' })
+    doc.setFontSize(14)
+    doc.text('SALARY SLIP', 105, 30, { align: 'center' })
+    
+    // Add details
+    doc.setFontSize(11)
+    doc.text(`Month: ${months[month - 1]} ${year}`, 20, 45)
+    doc.text(`Worker ID: #${worker.worker_id}`, 20, 52)
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 59)
+    
+    // Add earnings table
+    const earningsData = [
+      ['Description', 'Amount'],
+      ['Tea Plucked', `${worker.total_kg?.toFixed(1) || 0} kg`],
+      ['Gross Earnings', `KES ${worker.gross_earnings?.toFixed(2) || 0}`],
+      ['Advances', `KES -${worker.total_advances?.toFixed(2) || 0}`],
+      ['', ''],
+      ['NET PAY', `KES ${worker.net_pay?.toFixed(2) || 0}`]
+    ]
+    
+    doc.autoTable({
+      startY: 70,
+      body: earningsData,
+      theme: 'plain',
+      styles: { fontSize: 11 },
+      columnStyles: {
+        0: { fontStyle: 'bold', cellWidth: 100 },
+        1: { halign: 'right', cellWidth: 70 }
+      },
+      didParseCell: function(data) {
+        if (data.row.index === earningsData.length - 1) {
+          data.cell.styles.fontStyle = 'bold'
+          data.cell.styles.fontSize = 13
+        }
+      }
+    })
+    
+    // Add footer
+    doc.setFontSize(9)
+    doc.text('This is a computer generated document. No signature required.', 105, 280, { align: 'center' })
+    
+    doc.save(`salary_slip_worker${worker.worker_id}_${months[month - 1]}_${year}.pdf`)
   }
 
   const months = [
@@ -125,8 +227,8 @@ export default function Payroll() {
             <div className="farm-summary-label">Before deductions</div>
           </div>
           <div className="farm-summary-box">
-            <div className="farm-summary-title">Fertilizer Deductions</div>
-            <div className="farm-summary-value">KES {summary.total_fertilizer_deductions?.toFixed(2) || 0}</div>
+            <div className="farm-summary-title">Advances</div>
+            <div className="farm-summary-value">KES {summary.total_advances?.toFixed(2) || 0}</div>
             <div className="farm-summary-label">Total deductions</div>
           </div>
           <div className="farm-summary-box">
@@ -145,6 +247,15 @@ export default function Payroll() {
           <h2 className="farm-card-title">
             💵 Payroll for {months[month - 1]} {year}
           </h2>
+          {payroll.length > 0 && (
+            <button 
+              onClick={exportPayrollPDF}
+              className="farm-btn farm-btn-primary"
+              style={{marginLeft: 'auto'}}
+            >
+              📄 Export PDF Report
+            </button>
+          )}
         </div>
 
         {payroll.length === 0 ? (
@@ -161,10 +272,11 @@ export default function Payroll() {
                   <th>Worker ID</th>
                   <th>Total Quantity (kg)</th>
                   <th>Gross Earnings</th>
-                  <th>Fertilizer Deductions</th>
+                  <th>Advances</th>
                   <th>Net Pay</th>
                   <th>Status</th>
                   <th>Generated On</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -174,7 +286,7 @@ export default function Payroll() {
                     <td>{p.total_kg?.toFixed(1) || 0} kg</td>
                     <td>KES {p.gross_earnings?.toFixed(2) || 0}</td>
                     <td style={{color: 'var(--farm-brown)'}}>
-                      KES {p.fertilizer_deductions?.toFixed(2) || 0}
+                      KES {p.total_advances?.toFixed(2) || 0}
                     </td>
                     <td>
                       <strong style={{color: 'var(--farm-green)', fontSize: '1.1rem'}}>
@@ -187,6 +299,15 @@ export default function Payroll() {
                     <td>
                       {p.created_at ? new Date(p.created_at).toLocaleDateString() : 'N/A'}
                     </td>
+                    <td>
+                      <button 
+                        onClick={() => exportIndividualSlip(p)}
+                        className="farm-btn farm-btn-primary"
+                        style={{padding: '0.4rem 0.8rem', fontSize: '0.9rem'}}
+                      >
+                        📄 Slip
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -195,10 +316,11 @@ export default function Payroll() {
                   <td>TOTALS</td>
                   <td>{payroll.reduce((sum, p) => sum + (p.total_kg || 0), 0).toFixed(1)} kg</td>
                   <td>KES {payroll.reduce((sum, p) => sum + (p.gross_earnings || 0), 0).toFixed(2)}</td>
-                  <td>KES {payroll.reduce((sum, p) => sum + (p.fertilizer_deductions || 0), 0).toFixed(2)}</td>
+                  <td>KES {payroll.reduce((sum, p) => sum + (p.total_advances || 0), 0).toFixed(2)}</td>
                   <td style={{color: 'var(--farm-green)'}}>
                     KES {payroll.reduce((sum, p) => sum + (p.net_pay || 0), 0).toFixed(2)}
                   </td>
+                  <td>-</td>
                   <td>-</td>
                   <td>-</td>
                 </tr>
@@ -214,8 +336,8 @@ export default function Payroll() {
         <ul style={{paddingLeft: '1.5rem', lineHeight: '2'}}>
           <li><strong>Gross Earnings:</strong> Total kg × Factory rate per kg</li>
           <li><strong>Transport Deduction:</strong> Already deducted in daily records (KES 3/kg)</li>
-          <li><strong>Fertilizer Deductions:</strong> Fertilizer given to workers during the month</li>
-          <li><strong>Net Pay:</strong> Gross Earnings - Fertilizer Deductions</li>
+          <li><strong>Advances:</strong> Money advances given to workers during the month</li>
+          <li><strong>Net Pay:</strong> Gross Earnings - Advances</li>
           <li><strong>Calculation:</strong> Click "Calculate Payroll" to generate monthly salaries</li>
         </ul>
       </div>

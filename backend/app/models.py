@@ -30,48 +30,73 @@ class TeaPlucking(SQLModel, table=True):
     date: datetime
     comment: Optional[str] = Field(default=None)
     
-    # Calculated fields (stored for historical accuracy)
-    rate_per_kg: Optional[float] = Field(default=None)  # Rate at time of delivery
-    transport_deduction: Optional[float] = Field(default=None)  # Deduction at time
-    gross_amount: Optional[float] = Field(default=None)  # quantity * rate
-    net_amount: Optional[float] = Field(default=None)  # gross - (quantity * transport_deduction)
+    # Payment tracking (stored for historical accuracy)
+    worker_rate: float = 8.0  # KES 8/kg - what farm pays worker
+    factory_rate: Optional[float] = Field(default=None)  # Factory's rate per kg (e.g., KES 22)
+    transport_deduction: float = 3.0  # KES 3/kg deducted by factory
+    
+    # Calculated amounts
+    worker_payment: Optional[float] = Field(default=None)  # quantity * 8
+    factory_gross: Optional[float] = Field(default=None)  # quantity * factory_rate
+    factory_net_to_farm: Optional[float] = Field(default=None)  # factory_gross - (quantity * 3)
+    farm_profit: Optional[float] = Field(default=None)  # factory_net_to_farm - worker_payment
 
-class FertilizerTransaction(SQLModel, table=True):
-    """Track fertilizer given by factories"""
+class WorkerAdvance(SQLModel, table=True):
+    """Track money advances given to workers (deducted from monthly pay)"""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    worker_id: int = Field(foreign_key="staff.id")
+    amount: float  # Amount advanced in KES
+    date: datetime
+    month: int  # Month to deduct from (1-12)
+    year: int
+    deducted: bool = False  # Whether it's been deducted from payroll
+    notes: Optional[str] = Field(default=None)
+
+class FertilizerPurchase(SQLModel, table=True):
+    """Track fertilizer purchases from factories (farm pays factories)"""
     id: Optional[int] = Field(default=None, primary_key=True)
     factory_id: int = Field(foreign_key="factory.id")
-    worker_id: Optional[int] = Field(default=None, foreign_key="staff.id")  # If for specific worker
-    quantity: float  # in kg or bags
-    unit: str = "bags"
-    cost_per_unit: float
-    total_cost: float
+    bags: int  # Number of bags purchased
+    cost_per_bag: float = 2500.0  # KES 2,500 per bag
+    total_cost: float  # bags * cost_per_bag
     date: datetime
-    deduction_type: str = "monthly"  # "monthly", "annual_bonus", "immediate"
-    status: str = "pending"  # "pending", "completed", "cancelled"
+    payment_method: str = "tea_delivery"  # "tea_delivery" or "bonus_deduction"
+    paid: bool = False
+    payment_date: Optional[datetime] = Field(default=None)
+    notes: Optional[str] = Field(default=None)
+
+class BonusPayment(SQLModel, table=True):
+    """Track biannual bonus payments from factories"""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    factory_id: int = Field(foreign_key="factory.id")
+    period: str  # e.g., "2024-H1", "2024-H2"
+    amount: float  # Total bonus amount in KES
+    date_received: datetime
+    fertilizer_deductions: float = 0.0  # Fertilizer costs deducted from bonus
+    net_bonus: float  # amount - fertilizer_deductions
     notes: Optional[str] = Field(default=None)
 
 class MonthlyPayroll(SQLModel, table=True):
-    """Monthly salary records"""
+    """Monthly salary records for tea pluckers"""
     id: Optional[int] = Field(default=None, primary_key=True)
     worker_id: int = Field(foreign_key="staff.id")
     month: int  # 1-12
     year: int
     
     # Earnings
-    total_kg_plucked: float = 0
-    gross_earnings: float = 0  # Total before deductions
+    total_kg: float = 0  # Total kg plucked in month
+    gross_earnings: float = 0  # Total earnings before deductions
     
-    # Deductions
-    fertilizer_deduction: float = 0
-    other_deductions: float = 0
-    total_deductions: float = 0
+    # Deductions (Advances given during the month)
+    total_advances: float = 0  # Sum of all advances given in this month
     
     # Net pay
-    net_pay: float = 0
+    net_pay: float = 0  # gross_earnings - total_advances
     
-    # Payment status
+    # Payment tracking
     paid: bool = False
     payment_date: Optional[datetime] = Field(default=None)
+    created_at: Optional[datetime] = Field(default=None)
     notes: Optional[str] = Field(default=None)
 
 # --- Poultry ---
@@ -141,3 +166,23 @@ class Transaction(SQLModel, table=True):
     description: Optional[str] = Field(default=None)
     amount: Optional[float] = Field(default=0.0)
     unit: Optional[str] = Field(default=None)
+
+# --- Avocado Farm Management ---
+class AvocadoHarvest(SQLModel, table=True):
+    """Track avocado harvests from the 40+ grafted trees"""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    variety: str = "hass"  # "hass" or "fuerte"
+    quantity_kg: float  # Weight in kg
+    grade: Optional[str] = Field(default="A")  # Quality grade: A, B, C
+    date: datetime
+    notes: Optional[str] = Field(default=None)
+
+class AvocadoSale(SQLModel, table=True):
+    """Track avocado sales"""
+    id: Optional[int] = Field(default=None, primary_key=True)
+    quantity_kg: float  # Weight sold
+    price_per_kg: float  # Current: KES 20, Future: KES 35-40
+    buyer_name: Optional[str] = Field(default=None)
+    date: datetime
+    payment_status: str = "pending"  # "pending", "paid", "partial"
+    notes: Optional[str] = Field(default=None)

@@ -40,13 +40,19 @@ def add_tea_record(record: TeaPlucking, session: Session = Depends(get_session))
         if not factory:
             raise HTTPException(404, "Factory not found")
         
-        # Store rates for historical accuracy
-        record.rate_per_kg = factory.rate_per_kg
-        record.transport_deduction = factory.transport_deduction
+        # Payment structure:
+        # - Farm pays worker KES 8/kg
+        # - Factory pays farm at their rate (e.g., KES 22/kg)
+        # - Factory deducts KES 3/kg for transport
+        record.worker_rate = 8.0
+        record.factory_rate = factory.rate_per_kg
+        record.transport_deduction = 3.0
         
-        # Calculate amounts
-        record.gross_amount = record.quantity * factory.rate_per_kg
-        record.net_amount = record.gross_amount - (record.quantity * factory.transport_deduction)
+        # Calculate all amounts
+        record.worker_payment = record.quantity * 8.0
+        record.factory_gross = record.quantity * factory.rate_per_kg
+        record.factory_net_to_farm = record.factory_gross - (record.quantity * 3.0)
+        record.farm_profit = record.factory_net_to_farm - record.worker_payment
     
     # Set current date if not provided
     if not record.date:

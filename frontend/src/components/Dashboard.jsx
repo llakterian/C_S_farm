@@ -69,9 +69,18 @@ export default function Dashboard() {
 
   return (
     <div className="farm-fade-in">
-      <div className="farm-page-header">
-        <h1>📊 Farm Dashboard</h1>
-        <p>Overview of C. Sambu Farm operations and statistics</p>
+      <div className="farm-page-header" style={{
+        background: 'linear-gradient(135deg, rgba(45, 80, 22, 0.95) 0%, rgba(56, 102, 28, 0.95) 100%)',
+        color: 'white',
+        padding: '3rem 2rem',
+        borderRadius: '12px',
+        marginBottom: '2rem',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+        backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+        backgroundSize: '60px 60px'
+      }}>
+        <h1 style={{margin: '0 0 0.5rem 0', fontSize: '2.5rem'}}>📊 Farm Dashboard</h1>
+        <p style={{margin: 0, fontSize: '1.1rem', opacity: 0.95}}>Overview of C. Sambu Farm operations and statistics</p>
       </div>
 
       {/* Key Metrics */}
@@ -110,8 +119,24 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Tea Production Section with Background */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(139, 195, 74, 0.15) 100%)',
+        borderRadius: '12px',
+        padding: '1.5rem',
+        marginBottom: '2rem',
+        border: '2px solid rgba(76, 175, 80, 0.3)',
+        backgroundImage: 'url("data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M50 10 C30 10, 20 30, 20 50 C20 70, 30 90, 50 90 C70 90, 80 70, 80 50 C80 30, 70 10, 50 10 M50 20 C35 20, 30 35, 30 50 C30 65, 35 80, 50 80 C65 80, 70 65, 70 50 C70 35, 65 20, 50 20" fill="%232d5016" fill-opacity="0.05"/%3E%3C/svg%3E")',
+        backgroundSize: '150px 150px',
+        backgroundPosition: 'right bottom',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        <h2 style={{color: 'var(--farm-green)', marginBottom: '1rem', fontSize: '1.5rem'}}>
+          🍃 Tea Production Overview
+        </h2>
+
       {/* Factory Rates Card */}
-      <div className="farm-card">
+      <div className="farm-card" style={{backgroundColor: 'rgba(255, 255, 255, 0.9)'}}>
         <div className="farm-card-header">
           <h2 className="farm-card-title">🏭 Factory Rates</h2>
         </div>
@@ -132,6 +157,7 @@ export default function Dashboard() {
             ))}
           </div>
         )}
+      </div>
       </div>
 
       {/* Recent Tea Plucking Records */}
@@ -183,6 +209,66 @@ export default function Dashboard() {
         )}
       </div>
 
+      {/* Farm Sections Overview with Backgrounds */}
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem'}}>
+        {/* Dairy Section */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(255, 235, 205, 0.9) 0%, rgba(255, 218, 185, 0.9) 100%)',
+          borderRadius: '12px',
+          padding: '2rem',
+          border: '2px solid rgba(210, 105, 30, 0.3)',
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="40" cy="40" r="20" fill="%23d2691e" fill-opacity="0.1"/%3E%3Ccircle cx="40" cy="40" r="15" fill="%23d2691e" fill-opacity="0.1"/%3E%3C/svg%3E")',
+          backgroundPosition: 'right bottom',
+          backgroundRepeat: 'no-repeat'
+        }}>
+          <h3 style={{color: 'var(--farm-brown)', marginBottom: '1rem'}}>🐄 Dairy Operations</h3>
+          <p style={{marginBottom: '1rem'}}>Manage milk production and cattle health</p>
+          <a href="/dairy" style={{textDecoration: 'none'}}>
+            <button className="farm-btn farm-btn-primary" style={{width: '100%'}}>
+              View Dairy →
+            </button>
+          </a>
+        </div>
+
+        {/* Avocado Section */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(144, 238, 144, 0.9) 0%, rgba(152, 251, 152, 0.9) 100%)',
+          borderRadius: '12px',
+          padding: '2rem',
+          border: '2px solid rgba(34, 139, 34, 0.3)',
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"%3E%3Cellipse cx="40" cy="40" rx="25" ry="30" fill="%23228b22" fill-opacity="0.1"/%3E%3C/svg%3E")',
+          backgroundPosition: 'right bottom',
+          backgroundRepeat: 'no-repeat'
+        }}>
+          <h3 style={{color: '#228b22', marginBottom: '1rem'}}>🥑 Avocado Grove</h3>
+          <p style={{marginBottom: '1rem'}}>Track harvest from 40+ Hass & Fuerte trees</p>
+          <a href="/avocado" style={{textDecoration: 'none'}}>
+            <button className="farm-btn farm-btn-success" style={{width: '100%'}}>
+              View Avocado →
+            </button>
+          </a>
+        </div>
+
+        {/* Poultry Section */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(255, 250, 205, 0.9) 0%, rgba(255, 248, 220, 0.9) 100%)',
+          borderRadius: '12px',
+          padding: '2rem',
+          border: '2px solid rgba(255, 215, 0, 0.3)',
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M30 10 L35 20 L30 30 L25 20 Z" fill="%23ffd700" fill-opacity="0.2"/%3E%3C/svg%3E")',
+          backgroundPosition: 'right bottom',
+          backgroundRepeat: 'no-repeat'
+        }}>
+          <h3 style={{color: '#b8860b', marginBottom: '1rem'}}>🐔 Poultry Farm</h3>
+          <p style={{marginBottom: '1rem'}}>Monitor egg production and flock health</p>
+          <a href="/poultry" style={{textDecoration: 'none'}}>
+            <button className="farm-btn farm-btn-secondary" style={{width: '100%'}}>
+              View Poultry →
+            </button>
+          </a>
+        </div>
+      </div>
+
       {/* Quick Actions */}
       <div className="farm-card">
         <div className="farm-card-header">
@@ -200,9 +286,9 @@ export default function Dashboard() {
               💰 View Payroll
             </button>
           </a>
-          <a href="/staff" style={{textDecoration: 'none'}}>
+          <a href="/reports" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-success" style={{width: '100%', padding: '1.5rem'}}>
-              👥 Manage Staff
+              📊 View Reports
             </button>
           </a>
           <a href="/fertilizer" style={{textDecoration: 'none'}}>

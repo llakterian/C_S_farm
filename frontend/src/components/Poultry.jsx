@@ -4,89 +4,157 @@ import axios from 'axios'
 const API_BASE = 'http://localhost:8000'
 
 export default function Poultry() {
-  const [flocks, setFlocks] = useState([])
-  const [eggs, setEggs] = useState([])
-  const [flockForm, setFlockForm] = useState({ breed: '', date_added: '', current_count: 0, mortality: 0, housing_unit: '' })
-  const [eggForm, setEggForm] = useState({ flock_id: '', date_collected: '', quantity: 0, broken: 0, comments: '' })
+  const [records, setRecords] = useState([])
+  const [form, setForm] = useState({ type: 'eggs', quantity: 0, date: '', notes: '' })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchFlocks()
-    fetchEggs()
+    fetchRecords()
   }, [])
 
-  const fetchFlocks = async () => {
+  const fetchRecords = async () => {
+    setLoading(true)
     try {
-      const res = await axios.get(`${API_BASE}/poultry/flocks`)
-      setFlocks(res.data)
+      const res = await axios.get(`${API_BASE}/poultry/`)
+      setRecords(res.data)
     } catch (error) {
-      console.error('Error fetching flocks:', error)
+      console.error('Error fetching poultry records:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const fetchEggs = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/poultry/eggs`)
-      setEggs(res.data)
-    } catch (error) {
-      console.error('Error fetching eggs:', error)
-    }
-  }
-
-  const handleFlockSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.post(`${API_BASE}/poultry/flocks`, flockForm)
-      setFlockForm({ breed: '', date_added: '', current_count: 0, mortality: 0, housing_unit: '' })
-      fetchFlocks()
+      await axios.post(`${API_BASE}/poultry/`, {
+        ...form,
+        quantity: parseFloat(form.quantity),
+        date: form.date ? new Date(form.date).toISOString() : new Date().toISOString()
+      })
+      setForm({ type: 'eggs', quantity: 0, date: '', notes: '' })
+      fetchRecords()
+      alert('Poultry record added successfully!')
     } catch (error) {
-      console.error('Error adding flock:', error)
+      console.error('Error adding record:', error)
     }
   }
 
-  const handleEggSubmit = async (e) => {
-    e.preventDefault()
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this record?')) return
     try {
-      await axios.post(`${API_BASE}/poultry/eggs`, eggForm)
-      setEggForm({ flock_id: '', date_collected: '', quantity: 0, broken: 0, comments: '' })
-      fetchEggs()
+      await axios.delete(`${API_BASE}/poultry/${id}`)
+      fetchRecords()
     } catch (error) {
-      console.error('Error adding egg record:', error)
+      console.error('Error deleting record:', error)
     }
+  }
+
+  const calculateStats = () => {
+    const today = new Date().toDateString()
+    const todayRecords = records.filter(r => new Date(r.date).toDateString() === today)
+    
+    const totalEggs = records.filter(r => r.type === 'eggs').reduce((sum, r) => sum + r.quantity, 0)
+    const todayEggs = todayRecords.filter(r => r.type === 'eggs').reduce((sum, r) => sum + r.quantity, 0)
+    
+    return { totalEggs, todayEggs, total: records.length }
+  }
+
+  const stats = calculateStats()
+
+  if (loading) {
+    return <div className="farm-loading">Loading poultry data...</div>
   }
 
   return (
-    <div style={{padding:20}}>
-      <h1>Poultry Management</h1>
-      
-      <h2>Flocks</h2>
-      <ul>
-        {flocks.map(f => (
-          <li key={f.id}>{f.breed} - Count: {f.current_count} - Mortality: {f.mortality}</li>
-        ))}
-      </ul>
-      <form onSubmit={handleFlockSubmit}>
-        <input type="text" placeholder="Breed" value={flockForm.breed} onChange={e => setFlockForm({...flockForm, breed: e.target.value})} required />
-        <input type="date" value={flockForm.date_added} onChange={e => setFlockForm({...flockForm, date_added: e.target.value})} />
-        <input type="number" placeholder="Current Count" value={flockForm.current_count} onChange={e => setFlockForm({...flockForm, current_count: parseInt(e.target.value)})} />
-        <input type="number" placeholder="Mortality" value={flockForm.mortality} onChange={e => setFlockForm({...flockForm, mortality: parseInt(e.target.value)})} />
-        <input type="text" placeholder="Housing Unit" value={flockForm.housing_unit} onChange={e => setFlockForm({...flockForm, housing_unit: e.target.value})} />
-        <button type="submit">Add Flock</button>
-      </form>
+    <div className="farm-fade-in">
+      <div className="farm-page-header">
+        <h1>🐔 Poultry Management</h1>
+        <p>Track egg production and poultry activities</p>
+      </div>
 
-      <h2>Egg Production</h2>
-      <ul>
-        {eggs.map(e => (
-          <li key={e.id}>Flock {e.flock_id} - {e.date_collected} - Qty: {e.quantity} - Broken: {e.broken}</li>
-        ))}
-      </ul>
-      <form onSubmit={handleEggSubmit}>
-        <input type="number" placeholder="Flock ID" value={eggForm.flock_id} onChange={e => setEggForm({...eggForm, flock_id: parseInt(e.target.value)})} required />
-        <input type="date" value={eggForm.date_collected} onChange={e => setEggForm({...eggForm, date_collected: e.target.value})} required />
-        <input type="number" placeholder="Quantity" value={eggForm.quantity} onChange={e => setEggForm({...eggForm, quantity: parseInt(e.target.value)})} required />
-        <input type="number" placeholder="Broken" value={eggForm.broken} onChange={e => setEggForm({...eggForm, broken: parseInt(e.target.value)})} />
-        <input type="text" placeholder="Comments" value={eggForm.comments} onChange={e => setEggForm({...eggForm, comments: e.target.value})} />
-        <button type="submit">Add Egg Record</button>
-      </form>
+      <div className="farm-summary-grid">
+        <div className="farm-summary-box">
+          <div className="farm-summary-title">Today's Eggs</div>
+          <div className="farm-summary-value">{stats.todayEggs}</div>
+          <div className="farm-summary-label">Fresh eggs collected</div>
+        </div>
+        <div className="farm-summary-box">
+          <div className="farm-summary-title">Total Eggs</div>
+          <div className="farm-summary-value">{stats.totalEggs}</div>
+          <div className="farm-summary-label">All time production</div>
+        </div>
+        <div className="farm-summary-box">
+          <div className="farm-summary-title">Total Records</div>
+          <div className="farm-summary-value">{stats.total}</div>
+          <div className="farm-summary-label">All activities</div>
+        </div>
+      </div>
+
+      <div className="farm-card">
+        <div className="farm-card-header">
+          <h2 className="farm-card-title">➕ Add Poultry Record</h2>
+        </div>
+        <form onSubmit={handleSubmit} className="farm-form">
+          <div className="farm-form-group">
+            <label className="farm-form-label">Type</label>
+            <select className="farm-select" value={form.type} onChange={e => setForm({...form, type: e.target.value})}>
+              <option value="eggs">Eggs Collected</option>
+              <option value="feed">Feed Given</option>
+              <option value="sales">Birds Sold</option>
+              <option value="mortality">Mortality</option>
+            </select>
+          </div>
+          <div className="farm-form-group">
+            <label className="farm-form-label">Quantity</label>
+            <input className="farm-input" type="number" value={form.quantity} onChange={e => setForm({...form, quantity: e.target.value})} required />
+          </div>
+          <div className="farm-form-group">
+            <label className="farm-form-label">Date</label>
+            <input className="farm-input" type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} />
+          </div>
+          <div className="farm-form-group" style={{gridColumn: '1 / -1'}}>
+            <label className="farm-form-label">Notes</label>
+            <input className="farm-input" type="text" value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} />
+          </div>
+          <div style={{gridColumn: '1 / -1'}}>
+            <button type="submit" className="farm-btn farm-btn-primary">➕ Add Record</button>
+          </div>
+        </form>
+      </div>
+
+      <div className="farm-card">
+        <div className="farm-card-header">
+          <h2 className="farm-card-title">📋 Poultry Records</h2>
+        </div>
+        {records.length === 0 ? (
+          <div className="farm-empty-state">
+            <div className="farm-empty-icon">🐔</div>
+            <p>No poultry records yet.</p>
+          </div>
+        ) : (
+          <div style={{overflowX: 'auto'}}>
+            <table className="farm-table">
+              <thead>
+                <tr><th>Date</th><th>Type</th><th>Quantity</th><th>Notes</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                {records.map(r => (
+                  <tr key={r.id}>
+                    <td>{new Date(r.date).toLocaleDateString()}</td>
+                    <td><span className="farm-badge farm-badge-info">{r.type}</span></td>
+                    <td><strong>{r.quantity}</strong></td>
+                    <td>{r.notes || '-'}</td>
+                    <td>
+                      <button onClick={() => handleDelete(r.id)} className="farm-btn farm-btn-danger" style={{padding: '0.4rem 0.8rem'}}>🗑️</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

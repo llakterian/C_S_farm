@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine
 from app.models import SQLModel
 from app import models
-from app.routers import staff, poultry, dairy, dogs, inventory, finance, teaplucking, factories, payroll, fertilizer
+from app.routers import staff, poultry, dairy, dogs, inventory, finance, teaplucking, factories, payroll, fertilizer, avocado, advances, bonus, import_data
 
 app = FastAPI(title="C_S Farm Management API")
 
@@ -27,6 +27,10 @@ app.include_router(dairy.router, prefix="/dairy", tags=["Dairy"])
 app.include_router(dogs.router, prefix="/dogs", tags=["Dogs"])
 app.include_router(inventory.router, prefix="/inventory", tags=["Inventory"])
 app.include_router(finance.router, prefix="/finance", tags=["Finance"])
+app.include_router(avocado.router, prefix="/avocado", tags=["Avocado Farm"])
+app.include_router(advances.router, prefix="/advances", tags=["Worker Advances"])
+app.include_router(bonus.router, prefix="/bonus", tags=["Bonus Payments"])
+app.include_router(import_data.router, prefix="/import", tags=["Data Import"])
 
 @app.on_event("startup")
 def on_startup():
