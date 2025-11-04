@@ -1,0 +1,377 @@
+/* C. SAMBU FARM - Modern Farm Theme */
+
+:root {
+  --farm-green: #2d5016;
+  --farm-light-green: #4a7c2c;
+  --farm-accent: #8fb339;
+  --farm-brown: #6b4423;
+  --farm-light-brown: #8b6b47;
+  --farm-cream: #f5f1e8;
+  --farm-gold: #d4a574;
+  --farm-white: #ffffff;
+  --farm-shadow: rgba(0, 0, 0, 0.1);
+  --farm-text-dark: #2c3e50;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--farm-cream) 0%, #e8f5e9 100%);
+  color: var(--farm-text-dark);
+  min-height: 100vh;
+}
+
+/* Navigation Bar */
+.farm-nav {
+  background: linear-gradient(135deg, var(--farm-green) 0%, var(--farm-light-green) 100%);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 20px var(--farm-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.farm-nav-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.farm-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--farm-white);
+}
+
+.farm-logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.farm-logo-icon {
+  font-size: 2.5rem;
+}
+
+.farm-nav-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.farm-nav-link {
+  color: var(--farm-white);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.farm-nav-link:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Main Container */
+.farm-container {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+/* Page Header */
+.farm-page-header {
+  background: linear-gradient(135deg, var(--farm-brown) 0%, var(--farm-light-brown) 100%);
+  color: var(--farm-white);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px var(--farm-shadow);
+}
+
+.farm-page-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.farm-page-header p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+/* Cards */
+.farm-card {
+  background: var(--farm-white);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px var(--farm-shadow);
+  border: 3px solid var(--farm-accent);
+}
+
+.farm-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--farm-accent);
+}
+
+.farm-card-title {
+  font-size: 1.8rem;
+  color: var(--farm-green);
+  font-weight: 700;
+}
+
+/* Tables */
+.farm-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--farm-white);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px var(--farm-shadow);
+}
+
+.farm-table thead {
+  background: linear-gradient(135deg, var(--farm-green) 0%, var(--farm-light-green) 100%);
+  color: var(--farm-white);
+}
+
+.farm-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.farm-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.farm-table tbody tr:hover {
+  background: #f5f9f5;
+  transition: background 0.3s ease;
+}
+
+.farm-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Forms */
+.farm-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  background: var(--farm-cream);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid var(--farm-accent);
+}
+
+.farm-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.farm-form-label {
+  font-weight: 600;
+  color: var(--farm-green);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.farm-input,
+.farm-select {
+  padding: 0.8rem;
+  border: 2px solid var(--farm-accent);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: var(--farm-white);
+}
+
+.farm-input:focus,
+.farm-select:focus {
+  outline: none;
+  border-color: var(--farm-green);
+  box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+
+/* Buttons */
+.farm-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.farm-btn-primary {
+  background: linear-gradient(135deg, var(--farm-green) 0%, var(--farm-light-green) 100%);
+  color: var(--farm-white);
+}
+
+.farm-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--farm-shadow);
+}
+
+.farm-btn-secondary {
+  background: linear-gradient(135deg, var(--farm-accent) 0%, #a3c652 100%);
+  color: var(--farm-text-dark);
+}
+
+.farm-btn-danger {
+  background: linear-gradient(135deg, #c62828 0%, #d32f2f 100%);
+  color: var(--farm-white);
+}
+
+.farm-btn-success {
+  background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+  color: var(--farm-white);
+}
+
+/* Summary Boxes */
+.farm-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.farm-summary-box {
+  background: linear-gradient(135deg, var(--farm-white) 0%, var(--farm-cream) 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 3px solid var(--farm-accent);
+  box-shadow: 0 4px 16px var(--farm-shadow);
+}
+
+.farm-summary-title {
+  font-size: 0.9rem;
+  color: var(--farm-brown);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.farm-summary-value {
+  font-size: 2rem;
+  color: var(--farm-green);
+  font-weight: 700;
+}
+
+.farm-summary-label {
+  font-size: 0.85rem;
+  color: var(--farm-text-dark);
+  opacity: 0.8;
+}
+
+/* Badges */
+.farm-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.farm-badge-success {
+  background: #4caf50;
+  color: white;
+}
+
+.farm-badge-warning {
+  background: #ff9800;
+  color: white;
+}
+
+.farm-badge-danger {
+  background: #f44336;
+  color: white;
+}
+
+.farm-badge-info {
+  background: #2196f3;
+  color: white;
+}
+
+/* Empty State */
+
+.farm-empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--farm-brown);
+}
+
+.farm-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* Loading State */
+.farm-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--farm-green);
+  font-size: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .farm-nav-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .farm-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .farm-page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .farm-container {
+    padding: 0 1rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.farm-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}

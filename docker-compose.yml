@@ -1,22 +1,40 @@
-version: '3.8'
+version: "3.9"
+
 services:
   db:
-    image: postgres:15
+    image: postgres:16
+    container_name: cs_farm_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: farmdb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Syaalai32!
+      POSTGRES_DB: farm_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  backend:
-    build: ./backend
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: cs_farm_pgadmin
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/farmdb
+      PGADMIN_DEFAULT_EMAIL: admin@farm.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
     depends_on:
       - db
+
+  backend:
+    build: ./backend
+    container_name: cs_farm_api
+    environment:
+      DATABASE_URL: postgresql://admin:Syaalai32!@db:5432/farm_db
+    volumes:
+      - ./backend:/app
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
