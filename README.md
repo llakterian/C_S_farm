@@ -34,4 +34,3 @@ git push -u origin main
 
 ---
 
-This scaffold is ready for customization: I can now add real frontend pages, authentication, offline sync, and import scripts to load your CSV data into the Postgres DB.
