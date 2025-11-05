@@ -4,7 +4,7 @@
 
 ### Recommendation: **Progressive Web App (PWA)** ✅
 
-For your farm management system, I **strongly recommend using PWA** instead of native mobile apps. Here's why:
+I **strongly recommend using PWA** instead of native mobile apps. Here's why:
 
 ---
 
@@ -298,4 +298,4 @@ Options:
 - ❌ Time-consuming
 - ❌ Hard to maintain
 
-Your current PWA setup is **exactly what you need**. Just deploy it with HTTPS and your workers can install it like a regular app!
+The current PWA setup is **exactly what you need**. Just deploy it with HTTPS and users can install it like a regular app!
