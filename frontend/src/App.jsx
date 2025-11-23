@@ -15,6 +15,9 @@ import Expenses from './pages/Expenses'
 import Notifications from './pages/Notifications'
 import Livestock from './pages/Livestock'
 import Poultry from './pages/Poultry'
+import Farm from './pages/Farm'
+import Tasks from './pages/Tasks'
+import Profile from './pages/Profile'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -157,6 +160,36 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <Factories />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/farm"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Farm />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/tasks"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Tasks />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Profile />
             </Layout>
           </ProtectedRoute>
         }

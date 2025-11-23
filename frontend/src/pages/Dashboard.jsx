@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import { dbService } from '../services/db'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts'
 import WeatherWidget from '../components/WeatherWidget'
+import VoiceButton from '../components/VoiceButton'
+import useVoice from '../hooks/useVoice'
 
 export default function Dashboard() {
+    const { speak, getGreeting } = useVoice()
     const [stats, setStats] = useState({
         teaKg: 0,
         milkLiters: 0,
@@ -14,6 +17,10 @@ export default function Dashboard() {
 
     useEffect(() => {
         fetchStats()
+        // Voice greeting on load
+        setTimeout(() => {
+            speak(`${getGreeting()}! Welcome back to your farm dashboard.`)
+        }, 1000)
     }, [])
 
     const fetchStats = async () => {
@@ -71,27 +78,28 @@ export default function Dashboard() {
 
     return (
         <div className="space-y-8">
-            <div>
+            <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold leading-6 text-gray-900">Farm Overview (This Month)</h3>
-                <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                    <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt className="truncate text-sm font-medium text-gray-500">Tea Production</dt>
-                        <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{stats.teaKg.toLocaleString()} Kg</dd>
-                    </div>
-                    <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt className="truncate text-sm font-medium text-gray-500">Milk Production</dt>
-                        <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{stats.milkLiters.toLocaleString()} L</dd>
-                    </div>
-                    <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt className="truncate text-sm font-medium text-gray-500">Avocado Sales</dt>
-                        <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">KES {stats.avocadoSales.toLocaleString()}</dd>
-                    </div>
-                    <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt className="truncate text-sm font-medium text-gray-500">Total Workers</dt>
-                        <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{stats.activeWorkers}</dd>
-                    </div>
-                </dl>
+                <VoiceButton />
             </div>
+            <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                    <dt className="truncate text-sm font-medium text-gray-500">Tea Production</dt>
+                    <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{stats.teaKg.toLocaleString()} Kg</dd>
+                </div>
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                    <dt className="truncate text-sm font-medium text-gray-500">Milk Production</dt>
+                    <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{stats.milkLiters.toLocaleString()} L</dd>
+                </div>
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                    <dt className="truncate text-sm font-medium text-gray-500">Avocado Sales</dt>
+                    <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">KES {stats.avocadoSales.toLocaleString()}</dd>
+                </div>
+                <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                    <dt className="truncate text-sm font-medium text-gray-500">Total Workers</dt>
+                    <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{stats.activeWorkers}</dd>
+                </div>
+            </dl>
 
             {/* Weather Widget */}
             <WeatherWidget />
@@ -141,6 +149,6 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

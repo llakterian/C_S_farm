@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, useLocation } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
+import BottomNav from './BottomNav'
 
 const navigation = [
     { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -197,12 +198,15 @@ export default function Layout({ children }) {
                         </div>
                     </div>
 
-                    <main className="py-10">
+                    <main className="py-10 pb-20 md:pb-10">
                         <div className="px-4 sm:px-6 lg:px-8">
                             {children}
                         </div>
                     </main>
                 </div>
+
+                {/* Bottom Navigation for Mobile */}
+                <BottomNav />
             </div>
         </>
     )
