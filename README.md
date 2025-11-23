@@ -128,8 +128,3 @@ docker compose up --build
 ## 📞 Support
 For issues or questions, check the walkthrough guide in the artifacts folder.
 
-## 🎨 Design Philosophy
-- **Farmer-First**: Simple, intuitive interface
-- **Offline-First**: Works anywhere, anytime
-- **Data Ownership**: Your data stays on your device
-- **Zero Cost**: No subscriptions, no cloud fees

@@ -2,7 +2,7 @@
 
 ## Deploy Your Farm Management System for Remote Access
 
-This guide shows you how to host your application so colleagues can access it from anywhere via the internet.
+This guide shows how to host the application so colleagues can access it from anywhere via the internet.
 
 ---
 

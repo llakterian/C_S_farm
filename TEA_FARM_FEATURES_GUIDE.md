@@ -2,7 +2,7 @@
 
 ## 🌿 System Overview
 
-Your tea farm management system now has **comprehensive payroll, factory tracking, and fertilizer management** capabilities.
+The tea farm management system now has **comprehensive payroll, factory tracking, and fertilizer management** capabilities.
 
 ---
 
@@ -28,11 +28,10 @@ When you record tea plucking:
 4. **Automatic calculation**:
    - Gross Amount = Quantity × Factory Rate
    - Transport Deduction = Quantity × KES 3
-   - **Net Amount = Gross - Transport** (this is what worker earns)
+   - **Net Amount = Gross - Transport**
 
 Example:
 ```
-Worker: John Doe
 Factory: Unilever (KES 28/kg)
 Quantity: 50 kg
 
@@ -78,39 +77,6 @@ This will:
 - **Fertilizer Deduction** - Cost of fertilizer received
 - **Net Pay** - Final amount to pay
 - **Payment Status** - Paid/Unpaid
-
----
-
-## 🌱 Fertilizer Management
-
-### How Fertilizer Tracking Works
-
-Factories provide fertilizer to workers, which is deducted from their pay.
-
-#### Recording Fertilizer
-
-```
-Factory: Unilever Factory
-Worker: John Doe (optional - can be general farm fertilizer)
-Quantity: 10 bags
-Cost per Bag: KES 500
-Total Cost: KES 5,000
-Deduction Type: Monthly / Annual Bonus / Immediate
-```
-
-#### Deduction Types:
-
-1. **Monthly** - Deducted from next month's payroll
-2. **Annual Bonus** - Deducted from year-end bonus
-3. **Immediate** - Deducted right away
-
-#### Fertilizer in Payroll:
-
-When calculating monthly payroll:
-- System finds all pending fertilizer (status: "pending", type: "monthly")
-- Adds up total fertilizer cost
-- Deducts from gross earnings
-- Marks fertilizer as "completed" after deduction
 
 ---
 
