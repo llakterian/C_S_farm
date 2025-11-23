@@ -1,43 +1,43 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import engine
-from app.models import SQLModel
-from app import models
-from app.routers import staff, poultry, dairy, dogs, inventory, finance, teaplucking, factories, payroll, fertilizer, avocado, advances, bonus, import_data
+from app.core.config import settings
+from app.api import auth, crops, tasks, inventory
+from app.database import engine, Base
 
-app = FastAPI(title="C_S Farm Management API")
+# Create tables on startup (for now, until we use Alembic)
+Base.metadata.create_all(bind=engine)
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # In production, specify exact origins
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
-# Include routers
-app.include_router(staff.router, prefix="/staff", tags=["Staff"])
-app.include_router(teaplucking.router, prefix="/teaplucking", tags=["Tea Plucking"])
-app.include_router(factories.router, prefix="/factories", tags=["Factories"])
-app.include_router(payroll.router, prefix="/payroll", tags=["Payroll"])
-app.include_router(fertilizer.router, prefix="/fertilizer", tags=["Fertilizer"])
-app.include_router(poultry.router, prefix="/poultry", tags=["Poultry"])
-app.include_router(dairy.router, prefix="/dairy", tags=["Dairy"])
-app.include_router(dogs.router, prefix="/dogs", tags=["Dogs"])
-app.include_router(inventory.router, prefix="/inventory", tags=["Inventory"])
-app.include_router(finance.router, prefix="/finance", tags=["Finance"])
-app.include_router(avocado.router, prefix="/avocado", tags=["Avocado Farm"])
-app.include_router(advances.router, prefix="/advances", tags=["Worker Advances"])
-app.include_router(bonus.router, prefix="/bonus", tags=["Bonus Payments"])
-app.include_router(import_data.router, prefix="/import", tags=["Data Import"])
+# Set all CORS enabled origins
+if settings.BACKEND_CORS_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    # Default to allow all for dev
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
-@app.on_event("startup")
-def on_startup():
-    print("Initializing database...")
-    SQLModel.metadata.create_all(engine)
-    print("Database initialized.")
+app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
+app.include_router(crops.router, prefix=f"{settings.API_V1_STR}/crops", tags=["crops"])
+app.include_router(tasks.router, prefix=f"{settings.API_V1_STR}/tasks", tags=["tasks"])
+app.include_router(inventory.router, prefix=f"{settings.API_V1_STR}/inventory", tags=["inventory"])
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to C_S Farm API"}
+    return {"message": "Welcome to C. Sambu Farm Manager API"}
