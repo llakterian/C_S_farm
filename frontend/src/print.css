@@ -1,0 +1,70 @@
+/* Print Styles for C. Sambu Farm Manager */
+
+@media print {
+
+    /* Hide navigation and non-essential elements */
+    .no-print,
+    nav,
+    aside,
+    button,
+    .print\\:hidden {
+        display: none !important;
+    }
+
+    /* Ensure content takes full width */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Remove shadows and backgrounds for cleaner print */
+    .shadow,
+    .shadow-sm,
+    .shadow-lg {
+        box-shadow: none !important;
+    }
+
+    .bg-gray-50,
+    .bg-gray-100 {
+        background-color: white !important;
+    }
+
+    /* Ensure tables print properly */
+    table {
+        page-break-inside: auto;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    /* Better spacing for print */
+    h1,
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+
+    /* Ensure signature lines are visible */
+    td.border-b {
+        border-bottom: 1px solid #000 !important;
+    }
+
+    /* Print in portrait by default */
+    @page {
+        size: A4 portrait;
+        margin: 1.5cm;
+    }
+
+    /* For landscape reports */
+    .print-landscape {
+        @page {
+            size: A4 landscape;
+        }
+    }
+}
