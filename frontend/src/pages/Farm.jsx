@@ -13,7 +13,7 @@ const FarmPage = () => {
         {
             id: 'tea',
             name: 'Tea Plucking',
-            icon: '🍃',
+            icon: '',
             href: '/plucking',
             description: 'Record daily tea harvest',
             color: 'bg-green-100 text-green-800',
@@ -21,7 +21,7 @@ const FarmPage = () => {
         {
             id: 'livestock',
             name: 'Livestock',
-            icon: '🐄',
+            icon: '',
             href: '/livestock',
             description: 'Manage cows, AI services, calvings',
             color: 'bg-amber-100 text-amber-800',
@@ -29,7 +29,7 @@ const FarmPage = () => {
         {
             id: 'poultry',
             name: 'Poultry',
-            icon: '🐔',
+            icon: '',
             href: '/poultry',
             description: 'Track eggs and feed',
             color: 'bg-yellow-100 text-yellow-800',
@@ -37,7 +37,7 @@ const FarmPage = () => {
         {
             id: 'dairy',
             name: 'Dairy',
-            icon: '🥛',
+            icon: '',
             href: '/dairy',
             description: 'Milk production and feeds',
             color: 'bg-blue-100 text-blue-800',
@@ -45,7 +45,7 @@ const FarmPage = () => {
         {
             id: 'avocado',
             name: 'Avocado',
-            icon: '🥑',
+            icon: '',
             href: '/avocado',
             description: 'Sales and revenue tracking',
             color: 'bg-lime-100 text-lime-800',
@@ -53,7 +53,7 @@ const FarmPage = () => {
         {
             id: 'labor',
             name: 'Labor',
-            icon: '👷',
+            icon: '',
             href: '/labor',
             description: 'Track work hours',
             color: 'bg-orange-100 text-orange-800',
@@ -137,7 +137,7 @@ const FarmPage = () => {
 
             {/* Help Section */}
             <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                <h3 className="text-lg font-semibold text-blue-900 mb-2">💡 Getting Started</h3>
+                <h3 className="text-lg font-semibold text-blue-900 mb-2">Getting Started</h3>
                 <p className="text-sm text-blue-800 mb-4">
                     Tap any section above to start managing that part of your farm. All data is saved automatically on your device.
                 </p>

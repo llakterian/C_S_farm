@@ -102,7 +102,7 @@ export default function TeaPlucking() {
   return (
     <div className="farm-fade-in">
       <div className="farm-page-header">
-        <h1>🍃 Tea Plucking Management</h1>
+        <h1>Tea Plucking Management</h1>
         <p>Track daily tea plucking with factory rates and automatic payment calculations</p>
       </div>
 
@@ -141,18 +141,18 @@ export default function TeaPlucking() {
       {/* Add New Record Form */}
       <Card>
         <CardHeader>
-          <CardTitle>➕ Add Tea Plucking Record</CardTitle>
+          <CardTitle>Add Tea Plucking Record</CardTitle>
         </CardHeader>
         <CardContent>
           {staff.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-4xl mb-4">👥</div>
+              <div className="text-4xl mb-4"></div>
               <p className="text-muted-foreground">No tea plucking workers found.</p>
               <p className="text-sm text-muted-foreground">Please add staff members with pay type "per_kilo" first.</p>
             </div>
           ) : factories.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-4xl mb-4">🏭</div>
+              <div className="text-4xl mb-4"></div>
               <p className="text-muted-foreground">No factories found.</p>
               <p className="text-sm text-muted-foreground">Please initialize factories first.</p>
             </div>
@@ -224,7 +224,7 @@ export default function TeaPlucking() {
               </div>
 
               <div className="md:col-span-2">
-                <Button type="submit" className="w-full">➕ Add Record</Button>
+                <Button type="submit" className="w-full">Add Record</Button>
               </div>
             </form>
           )}
@@ -234,12 +234,12 @@ export default function TeaPlucking() {
       {/* Records Table */}
       <Card>
         <CardHeader>
-          <CardTitle>📋 Tea Plucking Records</CardTitle>
+          <CardTitle>Tea Plucking Records</CardTitle>
         </CardHeader>
         <CardContent>
           {records.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-4xl mb-4">🍃</div>
+              <div className="text-4xl mb-4"></div>
               <p className="text-muted-foreground">No tea plucking records yet.</p>
               <p className="text-sm text-muted-foreground">Add your first record using the form above.</p>
             </div>
@@ -284,7 +284,7 @@ export default function TeaPlucking() {
                           variant="destructive" 
                           size="sm"
                         >
-                          🗑️ Delete
+                          Delete
                         </Button>
                       </td>
                     </tr>

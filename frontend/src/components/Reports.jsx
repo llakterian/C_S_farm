@@ -252,14 +252,14 @@ export default function Reports() {
             </Card>
             <Card>
               <CardContent className="p-6">
-                <div className="text-sm font-medium text-muted-foreground">👥 Active Staff</div>
+                <div className="text-sm font-medium text-muted-foreground">Active Staff</div>
                 <div className="text-2xl font-bold text-foreground">{data.staff.length}</div>
                 <div className="text-xs text-muted-foreground">Total employees</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6">
-                <div className="text-sm font-medium text-muted-foreground">📊 Avg Daily Production</div>
+                <div className="text-sm font-medium text-muted-foreground">Avg Daily Production</div>
                 <div className="text-2xl font-bold text-foreground">{teaStats.avgDaily.toFixed(1)} kg</div>
                 <div className="text-xs text-muted-foreground">Per record</div>
               </CardContent>
@@ -269,7 +269,7 @@ export default function Reports() {
           {/* Tea Production Analysis */}
           <Card>
             <CardHeader>
-              <CardTitle>🍃 Tea Production Analysis</CardTitle>
+              <CardTitle>Tea Production Analysis</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -337,7 +337,7 @@ export default function Reports() {
           {/* Fertilizer Analysis */}
           <Card>
             <CardHeader>
-              <CardTitle>🌱 Fertilizer Analysis</CardTitle>
+              <CardTitle>Fertilizer Analysis</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -406,7 +406,7 @@ export default function Reports() {
           {/* Staff Overview */}
           <Card>
             <CardHeader>
-              <CardTitle>👥 Staff Overview</CardTitle>
+              <CardTitle>Staff Overview</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -441,7 +441,7 @@ export default function Reports() {
       {reportType === 'financial' && (
         <Card>
           <CardHeader>
-            <CardTitle>💰 Financial Summary</CardTitle>
+            <CardTitle>Financial Summary</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -490,7 +490,7 @@ export default function Reports() {
       {/* Information Card */}
       <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950 dark:to-cyan-950">
         <CardContent className="p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">ℹ️ About Reports</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">About Reports</h3>
           <ul className="space-y-2 pl-5">
             <li><strong>Overview:</strong> Comprehensive summary of all farm operations</li>
             <li><strong>Date Range:</strong> Filter data by custom date ranges</li>
