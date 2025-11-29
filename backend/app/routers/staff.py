@@ -18,6 +18,7 @@ def add_staff(staff: Staff, session: Session = Depends(get_session)):
     session.refresh(staff)
     return staff
 
+
 @router.get("/{staff_id}")
 def get_staff(staff_id: int, session: Session = Depends(get_session)):
     """Get a specific staff member"""
@@ -33,15 +34,14 @@ def update_staff(staff_id: int, updated_staff: Staff, session: Session = Depends
     if not staff:
         raise HTTPException(404, "Staff member not found")
     
-    staff.name = updated_staff.name
-    staff.role = updated_staff.role
-    staff.pay_type = updated_staff.pay_type
-    staff.pay_rate = updated_staff.pay_rate
+    for key, value in updated_staff.dict(exclude_unset=True).items():
+        setattr(staff, key, value)
     
     session.add(staff)
     session.commit()
     session.refresh(staff)
     return staff
+
 
 @router.delete("/{staff_id}")
 def delete_staff(staff_id: int, session: Session = Depends(get_session)):

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api import auth, crops, tasks, inventory
+from app.routers import staff, factories, teaplucking, advances, fertilizer, bonus, payroll
 from app.database import engine, Base
 
 # Create tables on startup (for now, until we use Alembic)
@@ -37,6 +38,15 @@ app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["aut
 app.include_router(crops.router, prefix=f"{settings.API_V1_STR}/crops", tags=["crops"])
 app.include_router(tasks.router, prefix=f"{settings.API_V1_STR}/tasks", tags=["tasks"])
 app.include_router(inventory.router, prefix=f"{settings.API_V1_STR}/inventory", tags=["inventory"])
+
+# New routers
+app.include_router(staff.router, prefix=f"{settings.API_V1_STR}/staff", tags=["staff"])
+app.include_router(factories.router, prefix=f"{settings.API_V1_STR}/factories", tags=["factories"])
+app.include_router(teaplucking.router, prefix=f"{settings.API_V1_STR}/teaplucking", tags=["teaplucking"])
+app.include_router(advances.router, prefix=f"{settings.API_V1_STR}/advances", tags=["advances"])
+app.include_router(fertilizer.router, prefix=f"{settings.API_V1_STR}/fertilizer", tags=["fertilizer"])
+app.include_router(bonus.router, prefix=f"{settings.API_V1_STR}/bonus", tags=["bonus"])
+app.include_router(payroll.router, prefix=f"{settings.API_V1_STR}/payroll", tags=["payroll"])
 
 @app.get("/")
 def root():

@@ -93,5 +93,10 @@ export const exportService = {
             'Avocado (KES)': m.avocadoIncome
         }));
         this.downloadCSV(data, filename, headers);
+    },
+
+    // Generic export for any data
+    exportGeneric(data, filename) {
+        this.downloadCSV(data, filename);
     }
 };

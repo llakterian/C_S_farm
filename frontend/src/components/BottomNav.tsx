@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
     HomeIcon,
@@ -26,7 +25,7 @@ const BottomNav = () => {
         { path: '/profile', label: 'Profile', icon: UserCircleIcon, iconSolid: UserCircleIconSolid },
     ];
 
-    const isActive = (path) => {
+    const isActive = (path: string) => {
         if (path === '/') return location.pathname === '/';
         return location.pathname.startsWith(path);
     };

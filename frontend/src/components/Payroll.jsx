@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Badge } from './ui/badge'
 
 const API_BASE = 'http://localhost:8000'
 
@@ -165,182 +169,185 @@ export default function Payroll() {
       </div>
 
       {/* Month/Year Selection */}
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">📅 Select Period</h2>
-        </div>
-        
-        <div className="farm-form" style={{gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))'}}>
-          <div className="farm-form-group">
-            <label className="farm-form-label">Month</label>
-            <select 
-              className="farm-select"
-              value={month}
-              onChange={(e) => setMonth(parseInt(e.target.value))}
-            >
-              {months.map((m, i) => (
-                <option key={i} value={i + 1}>{m}</option>
-              ))}
-            </select>
-          </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>📅 Select Period</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Month</label>
+              <select 
+                className="w-full"
+                value={month}
+                onChange={(e) => setMonth(parseInt(e.target.value))}
+              >
+                {months.map((m, i) => (
+                  <option key={i} value={i + 1}>{m}</option>
+                ))}
+              </select>
+            </div>
 
-          <div className="farm-form-group">
-            <label className="farm-form-label">Year</label>
-            <input
-              className="farm-input"
-              type="number"
-              value={year}
-              onChange={(e) => setYear(parseInt(e.target.value))}
-              min="2020"
-              max="2030"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Year</label>
+              <Input
+                type="number"
+                value={year}
+                onChange={(e) => setYear(parseInt(e.target.value))}
+                min="2020"
+                max="2030"
+              />
+            </div>
 
-          <div className="farm-form-group" style={{display: 'flex', alignItems: 'flex-end'}}>
-            <button 
-              onClick={calculatePayroll}
-              className="farm-btn farm-btn-secondary"
-              style={{width: '100%'}}
-            >
-              🔄 Calculate Payroll
-            </button>
+            <div className="flex items-end">
+              <Button 
+                onClick={calculatePayroll}
+                className="w-full"
+              >
+                🔄 Calculate Payroll
+              </Button>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Summary Statistics */}
       {summary && (
-        <div className="farm-summary-grid">
-          <div className="farm-summary-box">
-            <div className="farm-summary-title">Total Workers</div>
-            <div className="farm-summary-value">{summary.total_workers}</div>
-            <div className="farm-summary-label">Tea pluckers</div>
-          </div>
-          <div className="farm-summary-box">
-            <div className="farm-summary-title">Total Production</div>
-            <div className="farm-summary-value">{summary.total_kg?.toFixed(1) || 0} kg</div>
-            <div className="farm-summary-label">This month</div>
-          </div>
-          <div className="farm-summary-box">
-            <div className="farm-summary-title">Gross Earnings</div>
-            <div className="farm-summary-value">KES {summary.total_gross?.toFixed(2) || 0}</div>
-            <div className="farm-summary-label">Before deductions</div>
-          </div>
-          <div className="farm-summary-box">
-            <div className="farm-summary-title">Advances</div>
-            <div className="farm-summary-value">KES {summary.total_advances?.toFixed(2) || 0}</div>
-            <div className="farm-summary-label">Total deductions</div>
-          </div>
-          <div className="farm-summary-box">
-            <div className="farm-summary-title">Net Payroll</div>
-            <div className="farm-summary-value" style={{color: 'var(--farm-green)'}}>
-              KES {summary.total_net?.toFixed(2) || 0}
-            </div>
-            <div className="farm-summary-label">Final payout</div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <Card>
+            <CardContent className="p-6">
+              <div className="text-sm font-medium text-muted-foreground">Total Workers</div>
+              <div className="text-2xl font-bold text-foreground">{summary.total_workers}</div>
+              <div className="text-xs text-muted-foreground">Tea pluckers</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <div className="text-sm font-medium text-muted-foreground">Total Production</div>
+              <div className="text-2xl font-bold text-foreground">{summary.total_kg?.toFixed(1) || 0} kg</div>
+              <div className="text-xs text-muted-foreground">This month</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <div className="text-sm font-medium text-muted-foreground">Gross Earnings</div>
+              <div className="text-2xl font-bold text-foreground">KES {summary.total_gross?.toFixed(2) || 0}</div>
+              <div className="text-xs text-muted-foreground">Before deductions</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <div className="text-sm font-medium text-muted-foreground">Advances</div>
+              <div className="text-2xl font-bold text-amber-600">KES {summary.total_advances?.toFixed(2) || 0}</div>
+              <div className="text-xs text-muted-foreground">Total deductions</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <div className="text-sm font-medium text-muted-foreground">Net Payroll</div>
+              <div className="text-2xl font-bold text-green-600">KES {summary.total_net?.toFixed(2) || 0}</div>
+              <div className="text-xs text-muted-foreground">Final payout</div>
+            </CardContent>
+          </Card>
         </div>
       )}
 
       {/* Payroll Details Table */}
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>
             💵 Payroll for {months[month - 1]} {year}
-          </h2>
+          </CardTitle>
           {payroll.length > 0 && (
-            <button 
+            <Button 
               onClick={exportPayrollPDF}
-              className="farm-btn farm-btn-primary"
-              style={{marginLeft: 'auto'}}
             >
               📄 Export PDF Report
-            </button>
+            </Button>
           )}
-        </div>
-
-        {payroll.length === 0 ? (
-          <div className="farm-empty-state">
-            <div className="farm-empty-icon">💰</div>
-            <p>No payroll data for this period.</p>
-            <p>Click "Calculate Payroll" to generate monthly salaries.</p>
-          </div>
-        ) : (
-          <div style={{overflowX: 'auto'}}>
-            <table className="farm-table">
-              <thead>
-                <tr>
-                  <th>Worker ID</th>
-                  <th>Total Quantity (kg)</th>
-                  <th>Gross Earnings</th>
-                  <th>Advances</th>
-                  <th>Net Pay</th>
-                  <th>Status</th>
-                  <th>Generated On</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payroll.map((p, index) => (
-                  <tr key={index}>
-                    <td><strong>#{p.worker_id}</strong></td>
-                    <td>{p.total_kg?.toFixed(1) || 0} kg</td>
-                    <td>KES {p.gross_earnings?.toFixed(2) || 0}</td>
-                    <td style={{color: 'var(--farm-brown)'}}>
-                      KES {p.total_advances?.toFixed(2) || 0}
-                    </td>
-                    <td>
-                      <strong style={{color: 'var(--farm-green)', fontSize: '1.1rem'}}>
-                        KES {p.net_pay?.toFixed(2) || 0}
-                      </strong>
-                    </td>
-                    <td>
-                      <span className="farm-badge farm-badge-success">Calculated</span>
-                    </td>
-                    <td>
-                      {p.created_at ? new Date(p.created_at).toLocaleDateString() : 'N/A'}
-                    </td>
-                    <td>
-                      <button 
-                        onClick={() => exportIndividualSlip(p)}
-                        className="farm-btn farm-btn-primary"
-                        style={{padding: '0.4rem 0.8rem', fontSize: '0.9rem'}}
-                      >
-                        📄 Slip
-                      </button>
-                    </td>
+        </CardHeader>
+        <CardContent>
+          {payroll.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">💰</div>
+              <p className="text-muted-foreground">No payroll data for this period.</p>
+              <p className="text-sm text-muted-foreground">Click "Calculate Payroll" to generate monthly salaries.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2">Worker ID</th>
+                    <th className="text-left p-2">Total Quantity (kg)</th>
+                    <th className="text-left p-2">Gross Earnings</th>
+                    <th className="text-left p-2">Advances</th>
+                    <th className="text-left p-2">Net Pay</th>
+                    <th className="text-left p-2">Status</th>
+                    <th className="text-left p-2">Generated On</th>
+                    <th className="text-left p-2">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot style={{backgroundColor: 'var(--farm-cream)', fontWeight: 'bold'}}>
-                <tr>
-                  <td>TOTALS</td>
-                  <td>{payroll.reduce((sum, p) => sum + (p.total_kg || 0), 0).toFixed(1)} kg</td>
-                  <td>KES {payroll.reduce((sum, p) => sum + (p.gross_earnings || 0), 0).toFixed(2)}</td>
-                  <td>KES {payroll.reduce((sum, p) => sum + (p.total_advances || 0), 0).toFixed(2)}</td>
-                  <td style={{color: 'var(--farm-green)'}}>
-                    KES {payroll.reduce((sum, p) => sum + (p.net_pay || 0), 0).toFixed(2)}
-                  </td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {payroll.map((p, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="p-2"><strong>#{p.worker_id}</strong></td>
+                      <td className="p-2">{p.total_kg?.toFixed(1) || 0} kg</td>
+                      <td className="p-2">KES {p.gross_earnings?.toFixed(2) || 0}</td>
+                      <td className="p-2">
+                        <span className="text-amber-600">KES {p.total_advances?.toFixed(2) || 0}</span>
+                      </td>
+                      <td className="p-2">
+                        <strong className="text-green-600 text-lg">KES {p.net_pay?.toFixed(2) || 0}</strong>
+                      </td>
+                      <td className="p-2">
+                        <Badge variant="default">Calculated</Badge>
+                      </td>
+                      <td className="p-2">
+                        {p.created_at ? new Date(p.created_at).toLocaleDateString() : 'N/A'}
+                      </td>
+                      <td className="p-2">
+                        <Button 
+                          onClick={() => exportIndividualSlip(p)}
+                          size="sm"
+                        >
+                          📄 Slip
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="bg-muted font-bold">
+                  <tr>
+                    <td className="p-2">TOTALS</td>
+                    <td className="p-2">{payroll.reduce((sum, p) => sum + (p.total_kg || 0), 0).toFixed(1)} kg</td>
+                    <td className="p-2">KES {payroll.reduce((sum, p) => sum + (p.gross_earnings || 0), 0).toFixed(2)}</td>
+                    <td className="p-2">KES {payroll.reduce((sum, p) => sum + (p.total_advances || 0), 0).toFixed(2)}</td>
+                    <td className="p-2 text-green-600">KES {payroll.reduce((sum, p) => sum + (p.net_pay || 0), 0).toFixed(2)}</td>
+                    <td className="p-2">-</td>
+                    <td className="p-2">-</td>
+                    <td className="p-2">-</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Information Box */}
-      <div className="farm-card" style={{background: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)'}}>
-        <h3 style={{color: 'var(--farm-green)', marginBottom: '1rem'}}>ℹ️ How Payroll Works</h3>
-        <ul style={{paddingLeft: '1.5rem', lineHeight: '2'}}>
-          <li><strong>Gross Earnings:</strong> Total kg × Factory rate per kg</li>
-          <li><strong>Transport Deduction:</strong> Already deducted in daily records (KES 3/kg)</li>
-          <li><strong>Advances:</strong> Money advances given to workers during the month</li>
-          <li><strong>Net Pay:</strong> Gross Earnings - Advances</li>
-          <li><strong>Calculation:</strong> Click "Calculate Payroll" to generate monthly salaries</li>
-        </ul>
-      </div>
+      <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950 dark:to-cyan-950">
+        <CardContent className="p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">ℹ️ How Payroll Works</h3>
+          <ul className="space-y-2 pl-5">
+            <li><strong>Gross Earnings:</strong> Total kg × Factory rate per kg</li>
+            <li><strong>Transport Deduction:</strong> Already deducted in daily records (KES 3/kg)</li>
+            <li><strong>Advances:</strong> Money advances given to workers during the month</li>
+            <li><strong>Net Pay:</strong> Gross Earnings - Advances</li>
+            <li><strong>Calculation:</strong> Click "Calculate Payroll" to generate monthly salaries</li>
+          </ul>
+        </CardContent>
+      </Card>
     </div>
   )
 }

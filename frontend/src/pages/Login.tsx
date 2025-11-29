@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -10,7 +12,7 @@ export default function Login() {
     const error = useAuthStore((state) => state.error);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             await login(email, password);
@@ -23,7 +25,7 @@ export default function Login() {
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
                     Sign in to your farm
                 </h2>
             </div>
@@ -31,55 +33,53 @@ export default function Login() {
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-foreground">
                             Email address
                         </label>
                         <div className="mt-2">
-                            <input
+                            <Input
                                 id="email"
                                 name="email"
                                 type="email"
                                 autoComplete="email"
                                 required
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-farm-600 sm:text-sm sm:leading-6"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                             />
                         </div>
                     </div>
 
                     <div>
                         <div className="flex items-center justify-between">
-                            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="password" className="block text-sm font-medium leading-6 text-foreground">
                                 Password
                             </label>
                         </div>
                         <div className="mt-2">
-                            <input
+                            <Input
                                 id="password"
                                 name="password"
                                 type="password"
                                 autoComplete="current-password"
                                 required
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-farm-600 sm:text-sm sm:leading-6"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                             />
                         </div>
                     </div>
 
                     {error && (
-                        <div className="text-red-600 text-sm text-center">{error}</div>
+                        <div className="text-destructive text-sm text-center">{error}</div>
                     )}
 
                     <div>
-                        <button
+                        <Button
                             type="submit"
                             disabled={isLoading}
-                            className="flex w-full justify-center rounded-md bg-farm-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-farm-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-farm-600 disabled:opacity-50"
+                            className="w-full"
                         >
                             {isLoading ? 'Signing in...' : 'Sign in'}
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

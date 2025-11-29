@@ -1,26 +1,35 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import Layout from './components/Layout'
-import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'
-import Plucking from './pages/Plucking'
-import Payroll from './pages/Payroll'
-import Fertilizer from './pages/Fertilizer'
-import Workers from './pages/Workers'
-import Factories from './pages/Factories'
-import Dairy from './pages/Dairy'
-import Avocado from './pages/Avocado'
-import Labor from './pages/Labor'
-import Reports from './pages/Reports'
-import Expenses from './pages/Expenses'
-import Notifications from './pages/Notifications'
-import Livestock from './pages/Livestock'
-import Poultry from './pages/Poultry'
-import Farm from './pages/Farm'
-import Tasks from './pages/Tasks'
-import Profile from './pages/Profile'
-import ProtectedRoute from './components/ProtectedRoute'
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
+import Login from './pages/Login.tsx';
+import Dashboard from './pages/Dashboard.tsx';
+import Livestock from './pages/Livestock';
+import Poultry from './pages/Poultry';
+import Profile from './pages/Profile';
+import Advances from './pages/Advances';
+import Plucking from './pages/Plucking';
+import Dairy from './pages/Dairy';
+import Labor from './pages/Labor';
+import Payroll from './pages/Payroll';
+import Bonus from './pages/Bonus';
+import Expenses from './pages/Expenses';
+import Reports from './pages/Reports';
+import Notifications from './pages/Notifications';
+import Workers from './pages/Workers';
+import Factories from './pages/Factories';
+import Avocado from './pages/Avocado';
+import ProtectedRoute from './components/ProtectedRoute';
+import useAuthStore from './store/authStore';
+import { useVoice } from './hooks/useVoice';
 
 function App() {
+  const { user } = useAuthStore();
+  const { speak } = useVoice();
+
+  React.useEffect(() => {
+    if (user) speak('Welcome to C. Sambu Farm Manager. How can I help you today?');
+  }, [user, speak]);
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -35,41 +44,11 @@ function App() {
         }
       />
       <Route
-        path="/plucking"
+        path="/profile"
         element={
           <ProtectedRoute>
             <Layout>
-              <Plucking />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/payroll"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Payroll />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/fertilizer"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Fertilizer />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/dairy"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Dairy />
+              <Profile />
             </Layout>
           </ProtectedRoute>
         }
@@ -85,6 +64,16 @@ function App() {
         }
       />
       <Route
+        path="/advances"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Advances />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/poultry"
         element={
           <ProtectedRoute>
@@ -95,11 +84,21 @@ function App() {
         }
       />
       <Route
-        path="/avocado"
+        path="/plucking"
         element={
           <ProtectedRoute>
             <Layout>
-              <Avocado />
+              <Plucking />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dairy"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Dairy />
             </Layout>
           </ProtectedRoute>
         }
@@ -115,11 +114,21 @@ function App() {
         }
       />
       <Route
-        path="/reports"
+        path="/payroll"
         element={
           <ProtectedRoute>
             <Layout>
-              <Reports />
+              <Payroll />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bonus"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Bonus />
             </Layout>
           </ProtectedRoute>
         }
@@ -130,6 +139,16 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <Expenses />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reports"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Reports />
             </Layout>
           </ProtectedRoute>
         }
@@ -165,38 +184,19 @@ function App() {
         }
       />
       <Route
-        path="/farm"
+        path="/avocado"
         element={
           <ProtectedRoute>
             <Layout>
-              <Farm />
+              <Avocado />
             </Layout>
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/tasks"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Tasks />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Profile />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+      {/* Other routes as before */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;
