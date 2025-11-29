@@ -74,10 +74,86 @@ Once running, access the app at:
 - **Email**: `admin@farm.com`
 - **Password**: `admin123`
 
-## 📱 PWA Installation
-1. Open the app in Chrome/Edge
-2. Click the "Install" icon in the address bar
-3. Use it like a native app!
+## 📱 PWA Installation & Offline Features
+
+### 🚀 **Progressive Web App (PWA)**
+This app is designed as a **Progressive Web App** that can be installed on your device like a native app, but works entirely in your browser. No app store required!
+
+#### **Installation Steps:**
+1. **Open in Browser**: Visit the app URL in Chrome, Edge, or Safari
+2. **Install Prompt**: Look for the install icon (📱) in the address bar or use the install button that appears
+3. **Add to Home Screen**: The app will appear on your home screen like a native app
+4. **Launch**: Use it just like any other app!
+
+#### **What You Get:**
+- **Offline Access**: Full functionality even without internet
+- **Local Storage**: All data stored in your browser's IndexedDB
+- **Fast Loading**: Cached resources for instant startup
+- **Push Notifications**: Offline-capable notifications
+- **Native Feel**: Standalone experience, no browser UI
+
+### 🌐 **Offline Capabilities**
+
+#### **Data Storage:**
+- **IndexedDB**: All farm data stored locally in your browser
+- **Automatic Sync**: Changes sync when you reconnect to internet
+- **No Data Loss**: Everything saves automatically to local storage
+- **Storage Monitoring**: App shows local storage usage
+
+#### **Offline Features:**
+- **Record Everything**: Add plucking records, dairy production, expenses
+- **View Reports**: Access all reports and charts offline
+- **Calculate Payroll**: Generate payslips without internet
+- **Export Data**: Download PDFs and CSVs offline
+
+#### **Online Benefits:**
+- **Real-time Weather**: Live weather data when connected
+- **Data Backup**: Optional cloud sync (future feature)
+- **Push Notifications**: Server-sent notifications
+
+### 💾 **Storage & Data Management**
+
+#### **Local Storage Details:**
+- **Farm Data**: Workers, livestock, production records
+- **Reports**: Generated reports and export files
+- **Settings**: User preferences and configurations
+- **Cache**: App resources for fast loading
+
+#### **Data Persistence:**
+- **Auto-Save**: Every change saves immediately to local storage
+- **Backup**: Export data as CSV/JSON for external backup
+- **Import**: Restore data from backup files
+- **Migration**: Data survives app updates
+
+#### **Storage Monitoring:**
+- **Usage Display**: Shows local storage usage in offline indicator
+- **Quota Management**: Monitors available browser storage
+- **Cleanup**: Automatic cleanup of old cached data
+
+### 🔄 **Sync & Updates**
+
+#### **Automatic Updates:**
+- **Background Updates**: App updates automatically when online
+- **Version Checking**: Notifies when new features are available
+- **Seamless Upgrades**: Updates without data loss
+
+#### **Data Synchronization:**
+- **Conflict Resolution**: Smart merging of local and remote changes
+- **Change Tracking**: Shows what data has been modified offline
+- **Sync Status**: Visual indicators for sync progress
+
+### 🛠 **Technical Features**
+
+#### **Service Worker:**
+- **Offline Caching**: App shell and critical resources cached
+- **Background Sync**: Data syncs when connection restored
+- **Push Notifications**: Works offline and online
+
+#### **Installable Features:**
+- **Standalone Mode**: No browser chrome when installed
+- **App Shortcuts**: Quick access to Dashboard, Plucking, Payroll
+- **Splash Screen**: Custom loading screen
+- **Theme Integration**: Respects system dark/light preferences
 
 ## 🔧 Tech Stack
 - **Frontend**: React 18 + Vite

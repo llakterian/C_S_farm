@@ -18,9 +18,12 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, useLocation } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
+import ProtectedRoute from './ProtectedRoute'
 import BottomNav from './BottomNav'
 import { Button } from './ui/button'
 import { ThemeToggle } from './theme-toggle'
+import PWAInstallPrompt from './PWAInstallPrompt'
+import OfflineIndicator from './OfflineIndicator'
 
 const navigation = [
     { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -219,6 +222,12 @@ export default function Layout({ children }: LayoutProps) {
                 {/* Bottom Navigation for Mobile */}
                 <BottomNav />
             </div>
+
+            {/* PWA Install Prompt */}
+            <PWAInstallPrompt />
+
+            {/* Offline Indicator */}
+            <OfflineIndicator />
         </>
     )
 }

@@ -14,19 +14,83 @@ export default defineConfig({
         name: 'C. Sambu Farm Manager – Pro Edition',
         short_name: 'FarmPro',
         description: 'Offline-first farm management with voice guidance',
-        theme_color: '#ffffff',
+        theme_color: '#16a34a',
+        background_color: '#ffffff',
+        display: 'standalone',
+        orientation: 'portrait-primary',
+        scope: '/',
+        start_url: '/',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: 'icon-192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any maskable'
           },
           {
-            src: 'pwa-512x512.png',
+            src: 'icon-512.png',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ],
+        categories: ['productivity', 'business', 'utilities'],
+        shortcuts: [
+          {
+            name: 'Dashboard',
+            short_name: 'Dashboard',
+            description: 'View farm overview',
+            url: '/',
+            icons: [{ src: 'icon-192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Tea Plucking',
+            short_name: 'Plucking',
+            description: 'Record tea harvesting',
+            url: '/plucking',
+            icons: [{ src: 'icon-192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Payroll',
+            short_name: 'Payroll',
+            description: 'Manage worker payments',
+            url: '/payroll',
+            icons: [{ src: 'icon-192.png', sizes: '192x192' }]
           }
         ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/api\./,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+              },
+              cacheKeyWillBeUsed: async ({ request }) => {
+                return `${request.url}?${Date.now()}`;
+              }
+            }
+          },
+          {
+            urlPattern: /\.(?:png|gif|jpg|jpeg|svg)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              }
+            }
+          }
+        ]
+      },
+      devOptions: {
+        enabled: false
       }
     })
   ],
