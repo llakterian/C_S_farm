@@ -74,23 +74,24 @@ Once running, access the app at:
 - **Email**: `admin@farm.com`
 - **Password**: `admin123`
 
-## 📱 PWA Installation & Offline Features
+## 📱 PWA Features (Local Development Only)
 
-### 🚀 **Progressive Web App (PWA)**
-This app is designed as a **Progressive Web App** that can be installed on your device like a native app, but works entirely in your browser. No app store required!
+**Note:** PWA features are disabled in production builds to ensure compatibility with hosting platforms like Netlify. For the best offline experience, run the app locally using Docker.
 
-#### **Installation Steps:**
-1. **Open in Browser**: Visit the app URL in Chrome, Edge, or Safari
-2. **Install Prompt**: Look for the install icon (📱) in the address bar or use the install button that appears
-3. **Add to Home Screen**: The app will appear on your home screen like a native app
-4. **Launch**: Use it just like any other app!
+### 🚀 **Progressive Web App (Local Development)**
+When running locally, this app includes Progressive Web App features that can be installed on your device like a native app.
 
-#### **What You Get:**
+#### **Local PWA Installation Steps:**
+1. **Start the app locally**: `docker compose up --build`
+2. **Open in Browser**: Visit `http://localhost:5173` in Chrome, Edge, or Safari
+3. **Install Prompt**: Look for the install icon (📱) in the address bar
+4. **Add to Home Screen**: The app will appear on your home screen like a native app
+
+#### **Local PWA Features:**
 - **Offline Access**: Full functionality even without internet
 - **Local Storage**: All data stored in your browser's IndexedDB
-- **Fast Loading**: Cached resources for instant startup
-- **Push Notifications**: Offline-capable notifications
-- **Native Feel**: Standalone experience, no browser UI
+- **Installable**: Can be installed as a standalone app
+- **Native Feel**: Standalone experience without browser UI
 
 ### 🌐 **Offline Capabilities**
 
