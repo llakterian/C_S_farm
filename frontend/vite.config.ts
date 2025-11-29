@@ -66,25 +66,14 @@ export default defineConfig({
             urlPattern: /^https:\/\/api\./,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
-              },
-              cacheKeyWillBeUsed: async ({ request }) => {
-                return `${request.url}?${Date.now()}`;
-              }
+              cacheName: 'api-cache'
             }
           },
           {
             urlPattern: /\.(?:png|gif|jpg|jpeg|svg)$/,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'images-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
+              cacheName: 'images-cache'
             }
           }
         ]
