@@ -2,12 +2,30 @@ version: "3.9"
 
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: cs_farm_ui
     ports:
-      - "5173:5173"
+      - "5173:80"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - farm_data:/app/data  # For IndexedDB persistence
     environment:
-      - VITE_API_URL=http://localhost:5173
+      - VITE_ENCRYPT_KEY=${ENCRYPT_KEY}
+    restart: unless-stopped
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cs_farm_api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./farm.db
+    volumes:
+      - farm_db:/app/farm.db
+    restart: unless-stopped
+
+volumes:
+  farm_data:
+  farm_db:

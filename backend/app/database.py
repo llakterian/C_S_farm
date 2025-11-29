@@ -16,3 +16,6 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# Alias for compatibility with routers
+get_session = get_db

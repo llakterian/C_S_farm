@@ -12,8 +12,9 @@ def list_factories(session: Session = Depends(get_session)):
     return session.exec(select(Factory)).all()
 
 @router.post("/")
-def add_factory(factory: Factory, session: Session = Depends(get_session)):
+def add_factory(factory_data: dict, session: Session = Depends(get_session)):
     """Add a new tea factory"""
+    factory = Factory(**factory_data)
     session.add(factory)
     session.commit()
     session.refresh(factory)

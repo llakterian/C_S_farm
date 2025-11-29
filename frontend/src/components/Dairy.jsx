@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Badge } from './ui/badge'
 
 const API_BASE = 'http://localhost:8000'
 
@@ -73,88 +77,132 @@ export default function Dairy() {
         <p>Track milk production and cattle activities</p>
       </div>
 
-      <div className="farm-summary-grid">
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Today's Milk</div>
-          <div className="farm-summary-value">{stats.todayMilk.toFixed(1)} L</div>
-          <div className="farm-summary-label">Fresh milk collected</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Total Milk</div>
-          <div className="farm-summary-value">{stats.totalMilk.toFixed(1)} L</div>
-          <div className="farm-summary-label">All time production</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Total Records</div>
-          <div className="farm-summary-value">{stats.total}</div>
-          <div className="farm-summary-label">All activities</div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Today's Milk</div>
+            <div className="text-2xl font-bold text-foreground">{stats.todayMilk.toFixed(1)} L</div>
+            <div className="text-xs text-muted-foreground">Fresh milk collected</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Total Milk</div>
+            <div className="text-2xl font-bold text-foreground">{stats.totalMilk.toFixed(1)} L</div>
+            <div className="text-xs text-muted-foreground">All time production</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Total Records</div>
+            <div className="text-2xl font-bold text-foreground">{stats.total}</div>
+            <div className="text-xs text-muted-foreground">All activities</div>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">➕ Add Dairy Record</h2>
-        </div>
-        <form onSubmit={handleSubmit} className="farm-form">
-          <div className="farm-form-group">
-            <label className="farm-form-label">Type</label>
-            <select className="farm-select" value={form.type} onChange={e => setForm({...form, type: e.target.value})}>
-              <option value="milk">Milk Production (Liters)</option>
-              <option value="feed">Feed Given</option>
-              <option value="vet">Veterinary Visit</option>
-              <option value="sales">Cattle Sold</option>
-            </select>
-          </div>
-          <div className="farm-form-group">
-            <label className="farm-form-label">Quantity</label>
-            <input className="farm-input" type="number" step="0.1" value={form.quantity} onChange={e => setForm({...form, quantity: e.target.value})} required />
-          </div>
-          <div className="farm-form-group">
-            <label className="farm-form-label">Date</label>
-            <input className="farm-input" type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} />
-          </div>
-          <div className="farm-form-group" style={{gridColumn: '1 / -1'}}>
-            <label className="farm-form-label">Notes</label>
-            <input className="farm-input" type="text" value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} />
-          </div>
-          <div style={{gridColumn: '1 / -1'}}>
-            <button type="submit" className="farm-btn farm-btn-primary">➕ Add Record</button>
-          </div>
-        </form>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>➕ Add Dairy Record</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Type</label>
+              <select 
+                className="w-full"
+                value={form.type} 
+                onChange={e => setForm({...form, type: e.target.value})}
+              >
+                <option value="milk">Milk Production (Liters)</option>
+                <option value="feed">Feed Given</option>
+                <option value="vet">Veterinary Visit</option>
+                <option value="sales">Cattle Sold</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Quantity</label>
+              <Input 
+                type="number" 
+                step="0.1" 
+                value={form.quantity} 
+                onChange={e => setForm({...form, quantity: e.target.value})} 
+                required 
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Date</label>
+              <Input 
+                type="date" 
+                value={form.date} 
+                onChange={e => setForm({...form, date: e.target.value})} 
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-foreground mb-2">Notes</label>
+              <Input 
+                type="text" 
+                value={form.notes} 
+                onChange={e => setForm({...form, notes: e.target.value})} 
+              />
+            </div>
+            <div className="md:col-span-2">
+              <Button type="submit" className="w-full">➕ Add Record</Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">📋 Dairy Records</h2>
-        </div>
-        {records.length === 0 ? (
-          <div className="farm-empty-state">
-            <div className="farm-empty-icon">🐄</div>
-            <p>No dairy records yet.</p>
-          </div>
-        ) : (
-          <div style={{overflowX: 'auto'}}>
-            <table className="farm-table">
-              <thead>
-                <tr><th>Date</th><th>Type</th><th>Quantity</th><th>Notes</th><th>Actions</th></tr>
-              </thead>
-              <tbody>
-                {records.map(r => (
-                  <tr key={r.id}>
-                    <td>{new Date(r.date).toLocaleDateString()}</td>
-                    <td><span className="farm-badge farm-badge-success">{r.type}</span></td>
-                    <td><strong>{r.quantity} {r.type === 'milk' ? 'L' : ''}</strong></td>
-                    <td>{r.notes || '-'}</td>
-                    <td>
-                      <button onClick={() => handleDelete(r.id)} className="farm-btn farm-btn-danger" style={{padding: '0.4rem 0.8rem'}}>🗑️</button>
-                    </td>
+      <Card>
+        <CardHeader>
+          <CardTitle>📋 Dairy Records</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {records.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">🐄</div>
+              <p className="text-muted-foreground">No dairy records yet.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2">Date</th>
+                    <th className="text-left p-2">Type</th>
+                    <th className="text-left p-2">Quantity</th>
+                    <th className="text-left p-2">Notes</th>
+                    <th className="text-left p-2">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {records.map(r => (
+                    <tr key={r.id} className="border-b">
+                      <td className="p-2">{new Date(r.date).toLocaleDateString()}</td>
+                      <td className="p-2">
+                        <Badge variant="default">{r.type}</Badge>
+                      </td>
+                      <td className="p-2">
+                        <strong>{r.quantity} {r.type === 'milk' ? 'L' : ''}</strong>
+                      </td>
+                      <td className="p-2">{r.notes || '-'}</td>
+                      <td className="p-2">
+                        <Button 
+                          onClick={() => handleDelete(r.id)} 
+                          variant="destructive" 
+                          size="sm"
+                        >
+                          🗑️
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

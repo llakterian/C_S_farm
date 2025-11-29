@@ -79,41 +79,41 @@ export default function Dashboard() {
         backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
         backgroundSize: '60px 60px'
       }}>
-        <h1 style={{margin: '0 0 0.5rem 0', fontSize: '2.5rem'}}>📊 Farm Dashboard</h1>
+        <h1 style={{margin: '0 0 0.5rem 0', fontSize: '2.5rem'}}>Farm Dashboard</h1>
         <p style={{margin: 0, fontSize: '1.1rem', opacity: 0.95}}>Overview of C. Sambu Farm operations and statistics</p>
       </div>
 
       {/* Key Metrics */}
       <div className="farm-summary-grid">
         <div className="farm-summary-box">
-          <div className="farm-summary-title">👥 Total Staff</div>
+          <div className="farm-summary-title">Total Staff</div>
           <div className="farm-summary-value">{stats.totalWorkers}</div>
           <div className="farm-summary-label">{stats.teaWorkers} tea pluckers</div>
         </div>
         <div className="farm-summary-box">
-          <div className="farm-summary-title">🍃 Today's Production</div>
+          <div className="farm-summary-title">Today's Production</div>
           <div className="farm-summary-value">{stats.todayProduction.toFixed(1)} kg</div>
           <div className="farm-summary-label">Fresh tea leaves</div>
         </div>
         <div className="farm-summary-box">
-          <div className="farm-summary-title">📈 Total Production</div>
+          <div className="farm-summary-title">Total Production</div>
           <div className="farm-summary-value">{stats.totalProduction.toFixed(1)} kg</div>
           <div className="farm-summary-label">All time</div>
         </div>
         <div className="farm-summary-box">
-          <div className="farm-summary-title">💰 Monthly Gross</div>
+          <div className="farm-summary-title">Monthly Gross</div>
           <div className="farm-summary-value">KES {stats.monthlyGross.toFixed(0)}</div>
           <div className="farm-summary-label">This month</div>
         </div>
         <div className="farm-summary-box">
-          <div className="farm-summary-title">💵 Monthly Net</div>
+          <div className="farm-summary-title">Monthly Net</div>
           <div className="farm-summary-value" style={{color: 'var(--farm-green)'}}>
             KES {stats.monthlyNet.toFixed(0)}
           </div>
           <div className="farm-summary-label">After deductions</div>
         </div>
         <div className="farm-summary-box">
-          <div className="farm-summary-title">🏭 Active Factories</div>
+          <div className="farm-summary-title">Active Factories</div>
           <div className="farm-summary-value">{factories.length}</div>
           <div className="farm-summary-label">Tea processors</div>
         </div>
@@ -132,13 +132,13 @@ export default function Dashboard() {
         backgroundRepeat: 'no-repeat'
       }}>
         <h2 style={{color: 'var(--farm-green)', marginBottom: '1rem', fontSize: '1.5rem'}}>
-          🍃 Tea Production Overview
+          Tea Production Overview
         </h2>
 
       {/* Factory Rates Card */}
       <div className="farm-card" style={{backgroundColor: 'rgba(255, 255, 255, 0.9)'}}>
         <div className="farm-card-header">
-          <h2 className="farm-card-title">🏭 Factory Rates</h2>
+          <h2 className="farm-card-title">Factory Rates</h2>
         </div>
         
         {factories.length === 0 ? (
@@ -163,7 +163,7 @@ export default function Dashboard() {
       {/* Recent Tea Plucking Records */}
       <div className="farm-card">
         <div className="farm-card-header">
-          <h2 className="farm-card-title">📋 Recent Tea Plucking Activity</h2>
+          <h2 className="farm-card-title">Recent Tea Plucking Activity</h2>
         </div>
 
         {recentRecords.length === 0 ? (
@@ -221,7 +221,7 @@ export default function Dashboard() {
           backgroundPosition: 'right bottom',
           backgroundRepeat: 'no-repeat'
         }}>
-          <h3 style={{color: 'var(--farm-brown)', marginBottom: '1rem'}}>🐄 Dairy Operations</h3>
+          <h3 style={{color: 'var(--farm-brown)', marginBottom: '1rem'}}>Dairy Operations</h3>
           <p style={{marginBottom: '1rem'}}>Manage milk production and cattle health</p>
           <a href="/dairy" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-primary" style={{width: '100%'}}>
@@ -240,7 +240,7 @@ export default function Dashboard() {
           backgroundPosition: 'right bottom',
           backgroundRepeat: 'no-repeat'
         }}>
-          <h3 style={{color: '#228b22', marginBottom: '1rem'}}>🥑 Avocado Grove</h3>
+          <h3 style={{color: '#228b22', marginBottom: '1rem'}}>Avocado Grove</h3>
           <p style={{marginBottom: '1rem'}}>Track harvest from 40+ Hass & Fuerte trees</p>
           <a href="/avocado" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-success" style={{width: '100%'}}>
@@ -259,7 +259,7 @@ export default function Dashboard() {
           backgroundPosition: 'right bottom',
           backgroundRepeat: 'no-repeat'
         }}>
-          <h3 style={{color: '#b8860b', marginBottom: '1rem'}}>🐔 Poultry Farm</h3>
+          <h3 style={{color: '#b8860b', marginBottom: '1rem'}}>Poultry Farm</h3>
           <p style={{marginBottom: '1rem'}}>Monitor egg production and flock health</p>
           <a href="/poultry" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-secondary" style={{width: '100%'}}>
@@ -272,28 +272,28 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <div className="farm-card">
         <div className="farm-card-header">
-          <h2 className="farm-card-title">⚡ Quick Actions</h2>
+          <h2 className="farm-card-title">Quick Actions</h2>
         </div>
         
         <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem'}}>
           <a href="/teaplucking" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-primary" style={{width: '100%', padding: '1.5rem'}}>
-              🍃 Record Tea Plucking
+              Record Tea Plucking
             </button>
           </a>
           <a href="/payroll" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-secondary" style={{width: '100%', padding: '1.5rem'}}>
-              💰 View Payroll
+              View Payroll
             </button>
           </a>
           <a href="/reports" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-success" style={{width: '100%', padding: '1.5rem'}}>
-              📊 View Reports
+              View Reports
             </button>
           </a>
           <a href="/fertilizer" style={{textDecoration: 'none'}}>
             <button className="farm-btn farm-btn-primary" style={{width: '100%', padding: '1.5rem'}}>
-              🌱 Track Fertilizer
+              Track Fertilizer
             </button>
           </a>
         </div>
@@ -301,7 +301,7 @@ export default function Dashboard() {
 
       {/* System Information */}
       <div className="farm-card" style={{background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)'}}>
-        <h3 style={{color: 'var(--farm-brown)', marginBottom: '1rem'}}>ℹ️ System Status</h3>
+        <h3 style={{color: 'var(--farm-brown)', marginBottom: '1rem'}}>System Status</h3>
         <div style={{display: 'grid', gap: '0.5rem'}}>
           <div>✅ <strong>Backend API:</strong> Connected to http://localhost:8000</div>
           <div>✅ <strong>Database:</strong> PostgreSQL (Docker)</div>

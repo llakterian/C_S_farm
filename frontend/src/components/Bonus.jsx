@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Badge } from './ui/badge'
 
 const API_BASE = 'http://localhost:8000'
 
@@ -123,241 +127,241 @@ export default function Bonus() {
       </div>
 
       {/* Summary Statistics */}
-      <div className="farm-summary-grid">
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Total Bonuses</div>
-          <div className="farm-summary-value">{stats.count}</div>
-          <div className="farm-summary-label">All time</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Gross Bonuses</div>
-          <div className="farm-summary-value">KES {stats.totalAmount.toFixed(2)}</div>
-          <div className="farm-summary-label">Before deductions</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Fertilizer Deductions</div>
-          <div className="farm-summary-value" style={{color: 'var(--farm-brown)'}}>
-            KES {stats.totalFertilizerDeductions.toFixed(2)}
-          </div>
-          <div className="farm-summary-label">Total deducted</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Net Bonuses</div>
-          <div className="farm-summary-value" style={{color: 'var(--farm-green)'}}>
-            KES {stats.totalNetBonus.toFixed(2)}
-          </div>
-          <div className="farm-summary-label">Actually received</div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Total Bonuses</div>
+            <div className="text-2xl font-bold text-foreground">{stats.count}</div>
+            <div className="text-xs text-muted-foreground">All time</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Gross Bonuses</div>
+            <div className="text-2xl font-bold text-foreground">KES {stats.totalAmount.toFixed(2)}</div>
+            <div className="text-xs text-muted-foreground">Before deductions</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Fertilizer Deductions</div>
+            <div className="text-2xl font-bold text-amber-600">KES {stats.totalFertilizerDeductions.toFixed(2)}</div>
+            <div className="text-xs text-muted-foreground">Total deducted</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Net Bonuses</div>
+            <div className="text-2xl font-bold text-green-600">KES {stats.totalNetBonus.toFixed(2)}</div>
+            <div className="text-xs text-muted-foreground">Actually received</div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Add Bonus Payment Form */}
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">➕ Record Bonus Payment</h2>
-        </div>
-
-        {factories.length === 0 ? (
-          <div className="farm-empty-state">
-            <div className="farm-empty-icon">🏭</div>
-            <p>No factories found.</p>
-            <p>Please initialize factories first.</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="farm-form">
-            <div className="farm-form-group">
-              <label className="farm-form-label">Factory</label>
-              <select 
-                className="farm-select"
-                value={form.factory_id} 
-                onChange={e => setForm({...form, factory_id: e.target.value})}
-                required
-              >
-                <option value="">Select Factory</option>
-                {factories.map(f => (
-                  <option key={f.id} value={f.id}>{f.name}</option>
-                ))}
-              </select>
+      <Card>
+        <CardHeader>
+          <CardTitle>➕ Record Bonus Payment</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {factories.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">🏭</div>
+              <p className="text-muted-foreground">No factories found.</p>
+              <p className="text-sm text-muted-foreground">Please initialize factories first.</p>
             </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Factory</label>
+                <select 
+                  className="w-full"
+                  value={form.factory_id} 
+                  onChange={e => setForm({...form, factory_id: e.target.value})}
+                  required
+                >
+                  <option value="">Select Factory</option>
+                  {factories.map(f => (
+                    <option key={f.id} value={f.id}>{f.name}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="farm-form-group">
-              <label className="farm-form-label">Period</label>
-              <select 
-                className="farm-select"
-                value={form.period}
-                onChange={e => setForm({...form, period: e.target.value})}
-                required
-              >
-                <option value="">Select Period</option>
-                {periodOptions.map(p => (
-                  <option key={p.value} value={p.value}>{p.label}</option>
-                ))}
-              </select>
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Period</label>
+                <select 
+                  className="w-full"
+                  value={form.period}
+                  onChange={e => setForm({...form, period: e.target.value})}
+                  required
+                >
+                  <option value="">Select Period</option>
+                  {periodOptions.map(p => (
+                    <option key={p.value} value={p.value}>{p.label}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="farm-form-group">
-              <label className="farm-form-label">Bonus Amount (KES)</label>
-              <input
-                className="farm-input"
-                type="number"
-                step="0.01"
-                min="0"
-                placeholder="Total bonus amount"
-                value={form.amount}
-                onChange={e => setForm({...form, amount: e.target.value})}
-                required
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Bonus Amount (KES)</label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="Total bonus amount"
+                  value={form.amount}
+                  onChange={e => setForm({...form, amount: e.target.value})}
+                  required
+                />
+              </div>
 
-            <div className="farm-form-group">
-              <label className="farm-form-label">Fertilizer Deductions (KES)</label>
-              <input
-                className="farm-input"
-                type="number"
-                step="0.01"
-                min="0"
-                placeholder="Fertilizer costs"
-                value={form.fertilizer_deductions}
-                onChange={e => setForm({...form, fertilizer_deductions: e.target.value})}
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Fertilizer Deductions (KES)</label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="Fertilizer costs"
+                  value={form.fertilizer_deductions}
+                  onChange={e => setForm({...form, fertilizer_deductions: e.target.value})}
+                />
+              </div>
 
-            <div className="farm-form-group">
-              <label className="farm-form-label">Net Bonus (Auto-calculated)</label>
-              <input
-                className="farm-input"
-                type="text"
-                value={`KES ${((parseFloat(form.amount) || 0) - (parseFloat(form.fertilizer_deductions) || 0)).toLocaleString()}`}
-                disabled
-                style={{backgroundColor: '#e8f5e9', color: '#2d5016', fontWeight: 'bold'}}
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Net Bonus (Auto-calculated)</label>
+                <Input
+                  type="text"
+                  value={`KES ${((parseFloat(form.amount) || 0) - (parseFloat(form.fertilizer_deductions) || 0)).toLocaleString()}`}
+                  disabled
+                  className="bg-green-50 text-green-800 font-bold"
+                />
+              </div>
 
-            <div className="farm-form-group">
-              <label className="farm-form-label">Date Received</label>
-              <input
-                className="farm-input"
-                type="date"
-                value={form.date_received}
-                onChange={e => setForm({...form, date_received: e.target.value})}
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Date Received</label>
+                <Input
+                  type="date"
+                  value={form.date_received}
+                  onChange={e => setForm({...form, date_received: e.target.value})}
+                />
+              </div>
 
-            <div className="farm-form-group" style={{gridColumn: '1 / -1'}}>
-              <label className="farm-form-label">Notes (optional)</label>
-              <input
-                className="farm-input"
-                type="text"
-                placeholder="Add any notes about this bonus..."
-                value={form.notes}
-                onChange={e => setForm({...form, notes: e.target.value})}
-              />
-            </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-foreground mb-2">Notes (optional)</label>
+                <Input
+                  type="text"
+                  placeholder="Add any notes about this bonus..."
+                  value={form.notes}
+                  onChange={e => setForm({...form, notes: e.target.value})}
+                />
+              </div>
 
-            <div style={{gridColumn: '1 / -1'}}>
-              <button type="submit" className="farm-btn farm-btn-primary">
-                ➕ Record Bonus
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
+              <div className="md:col-span-2">
+                <Button type="submit" className="w-full">
+                  ➕ Record Bonus
+                </Button>
+              </div>
+            </form>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Bonus Payments Table */}
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">📋 Bonus Payment History</h2>
-        </div>
-
-        {bonuses.length === 0 ? (
-          <div className="farm-empty-state">
-            <div className="farm-empty-icon">🎁</div>
-            <p>No bonus payments yet.</p>
-            <p>Record bonuses using the form above.</p>
-          </div>
-        ) : (
-          <div style={{overflowX: 'auto'}}>
-            <table className="farm-table">
-              <thead>
-                <tr>
-                  <th>Date Received</th>
-                  <th>Factory</th>
-                  <th>Period</th>
-                  <th>Gross Bonus</th>
-                  <th>Fertilizer Deductions</th>
-                  <th>Net Bonus</th>
-                  <th>Notes</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bonuses.map(b => (
-                  <tr key={b.id}>
-                    <td>{b.date_received ? new Date(b.date_received).toLocaleDateString() : 'N/A'}</td>
-                    <td>
-                      <span className="farm-badge farm-badge-info">
-                        {b.factory_name || `Factory #${b.factory_id}`}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="farm-badge farm-badge-success">
-                        {b.period}
-                      </span>
-                    </td>
-                    <td>
-                      <strong>KES {b.amount?.toLocaleString() || 0}</strong>
-                    </td>
-                    <td style={{color: 'var(--farm-brown)'}}>
-                      KES {b.fertilizer_deductions?.toLocaleString() || 0}
-                    </td>
-                    <td>
-                      <strong style={{color: 'var(--farm-green)', fontSize: '1.1rem'}}>
-                        KES {b.net_bonus?.toLocaleString() || 0}
-                      </strong>
-                    </td>
-                    <td>{b.notes || '-'}</td>
-                    <td>
-                      <button 
-                        onClick={() => handleDelete(b.id)}
-                        className="farm-btn farm-btn-danger"
-                        style={{padding: '0.3rem 0.6rem', fontSize: '0.85rem'}}
-                      >
-                        🗑️ Delete
-                      </button>
-                    </td>
+      <Card>
+        <CardHeader>
+          <CardTitle>📋 Bonus Payment History</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {bonuses.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">🎁</div>
+              <p className="text-muted-foreground">No bonus payments yet.</p>
+              <p className="text-sm text-muted-foreground">Record bonuses using the form above.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2">Date Received</th>
+                    <th className="text-left p-2">Factory</th>
+                    <th className="text-left p-2">Period</th>
+                    <th className="text-left p-2">Gross Bonus</th>
+                    <th className="text-left p-2">Fertilizer Deductions</th>
+                    <th className="text-left p-2">Net Bonus</th>
+                    <th className="text-left p-2">Notes</th>
+                    <th className="text-left p-2">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot style={{backgroundColor: 'var(--farm-cream)', fontWeight: 'bold'}}>
-                <tr>
-                  <td colSpan="3">TOTALS</td>
-                  <td>KES {stats.totalAmount.toFixed(2)}</td>
-                  <td>KES {stats.totalFertilizerDeductions.toFixed(2)}</td>
-                  <td style={{color: 'var(--farm-green)'}}>
-                    KES {stats.totalNetBonus.toFixed(2)}
-                  </td>
-                  <td colSpan="2">-</td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {bonuses.map(b => (
+                    <tr key={b.id} className="border-b">
+                      <td className="p-2">{b.date_received ? new Date(b.date_received).toLocaleDateString() : 'N/A'}</td>
+                      <td className="p-2">
+                        <Badge variant="secondary">
+                          {b.factory_name || `Factory #${b.factory_id}`}
+                        </Badge>
+                      </td>
+                      <td className="p-2">
+                        <Badge variant="default">
+                          {b.period}
+                        </Badge>
+                      </td>
+                      <td className="p-2">
+                        <strong>KES {b.amount?.toLocaleString() || 0}</strong>
+                      </td>
+                      <td className="p-2">
+                        <span className="text-amber-600">KES {b.fertilizer_deductions?.toLocaleString() || 0}</span>
+                      </td>
+                      <td className="p-2">
+                        <strong className="text-green-600 text-lg">KES {b.net_bonus?.toLocaleString() || 0}</strong>
+                      </td>
+                      <td className="p-2">{b.notes || '-'}</td>
+                      <td className="p-2">
+                        <Button 
+                          onClick={() => handleDelete(b.id)}
+                          variant="destructive"
+                          size="sm"
+                        >
+                          🗑️ Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="bg-muted font-bold">
+                  <tr>
+                    <td colSpan="3" className="p-2">TOTALS</td>
+                    <td className="p-2">KES {stats.totalAmount.toFixed(2)}</td>
+                    <td className="p-2">KES {stats.totalFertilizerDeductions.toFixed(2)}</td>
+                    <td className="p-2 text-green-600">KES {stats.totalNetBonus.toFixed(2)}</td>
+                    <td colSpan="2" className="p-2">-</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Information Box */}
-      <div className="farm-card" style={{background: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)'}}>
-        <h3 style={{color: 'var(--farm-green)', marginBottom: '1rem'}}>ℹ️ How Bonus System Works</h3>
-        <ul style={{paddingLeft: '1.5rem', lineHeight: '2'}}>
-          <li><strong>Biannual Payments:</strong> Factories pay bonuses twice per year (H1 and H2)</li>
-          <li><strong>Payment Schedule:</strong></li>
-          <ul style={{paddingLeft: '1.5rem', marginTop: '0.5rem'}}>
-            <li><strong>H1 (First Half):</strong> Bonus for January-June production</li>
-            <li><strong>H2 (Second Half):</strong> Bonus for July-December production</li>
+      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950">
+        <CardContent className="p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">ℹ️ How Bonus System Works</h3>
+          <ul className="space-y-2 pl-5">
+            <li><strong>Biannual Payments:</strong> Factories pay bonuses twice per year (H1 and H2)</li>
+            <li><strong>Payment Schedule:</strong>
+              <ul className="ml-5 mt-2 space-y-1">
+                <li><strong>H1 (First Half):</strong> Bonus for January-June production</li>
+                <li><strong>H2 (Second Half):</strong> Bonus for July-December production</li>
+              </ul>
+            </li>
+            <li><strong>Fertilizer Deductions:</strong> Cost of fertilizer purchased from factory is deducted from bonus</li>
+            <li><strong>Net Bonus:</strong> Gross Bonus - Fertilizer Deductions = Amount Actually Received</li>
+            <li><strong>Tracking:</strong> System helps reconcile fertilizer payments with bonus payments</li>
           </ul>
-          <li><strong>Fertilizer Deductions:</strong> Cost of fertilizer purchased from factory is deducted from bonus</li>
-          <li><strong>Net Bonus:</strong> Gross Bonus - Fertilizer Deductions = Amount Actually Received</li>
-          <li><strong>Tracking:</strong> System helps reconcile fertilizer payments with bonus payments</li>
-        </ul>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

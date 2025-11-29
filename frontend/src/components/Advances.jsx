@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Badge } from './ui/badge'
 
 const API_BASE = 'http://localhost:8000'
 
@@ -115,117 +119,18 @@ export default function Advances() {
       </div>
 
       {/* Filter Section */}
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">📅 Filter by Period</h2>
-        </div>
-        
-        <div className="farm-form" style={{gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))'}}>
-          <div className="farm-form-group">
-            <label className="farm-form-label">Month</label>
-            <select 
-              className="farm-select"
-              value={filterMonth}
-              onChange={(e) => setFilterMonth(parseInt(e.target.value))}
-            >
-              {months.map((m, i) => (
-                <option key={i} value={i + 1}>{m}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="farm-form-group">
-            <label className="farm-form-label">Year</label>
-            <input
-              className="farm-input"
-              type="number"
-              value={filterYear}
-              onChange={(e) => setFilterYear(parseInt(e.target.value))}
-              min="2020"
-              max="2030"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Statistics */}
-      <div className="farm-summary-grid">
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Total Advances</div>
-          <div className="farm-summary-value">{stats.count}</div>
-          <div className="farm-summary-label">This period</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Total Amount</div>
-          <div className="farm-summary-value">KES {stats.total.toFixed(2)}</div>
-          <div className="farm-summary-label">All advances</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Pending</div>
-          <div className="farm-summary-value" style={{color: 'var(--farm-brown)'}}>
-            KES {stats.pending.toFixed(2)}
-          </div>
-          <div className="farm-summary-label">Not yet deducted</div>
-        </div>
-        <div className="farm-summary-box">
-          <div className="farm-summary-title">Deducted</div>
-          <div className="farm-summary-value" style={{color: 'var(--farm-green)'}}>
-            KES {stats.deducted.toFixed(2)}
-          </div>
-          <div className="farm-summary-label">From payroll</div>
-        </div>
-      </div>
-
-      {/* Add Advance Form */}
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">➕ Record Worker Advance</h2>
-        </div>
-
-        {staff.length === 0 ? (
-          <div className="farm-empty-state">
-            <div className="farm-empty-icon">👥</div>
-            <p>No tea plucking workers found.</p>
-            <p>Please add staff members with pay type "per_kilo" first.</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="farm-form">
-            <div className="farm-form-group">
-              <label className="farm-form-label">Worker</label>
+      <Card>
+        <CardHeader>
+          <CardTitle>📅 Filter by Period</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Month</label>
               <select 
-                className="farm-select"
-                value={form.worker_id} 
-                onChange={e => setForm({...form, worker_id: e.target.value})}
-                required
-              >
-                <option value="">Select Worker</option>
-                {staff.map(s => (
-                  <option key={s.id} value={s.id}>{s.name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="farm-form-group">
-              <label className="farm-form-label">Amount (KES)</label>
-              <input
-                className="farm-input"
-                type="number"
-                step="0.01"
-                min="0"
-                placeholder="Enter amount"
-                value={form.amount}
-                onChange={e => setForm({...form, amount: e.target.value})}
-                required
-              />
-            </div>
-
-            <div className="farm-form-group">
-              <label className="farm-form-label">Deduct from Month</label>
-              <select 
-                className="farm-select"
-                value={form.month}
-                onChange={e => setForm({...form, month: e.target.value})}
-                required
+                className="w-full"
+                value={filterMonth}
+                onChange={(e) => setFilterMonth(parseInt(e.target.value))}
               >
                 {months.map((m, i) => (
                   <option key={i} value={i + 1}>{m}</option>
@@ -233,140 +138,241 @@ export default function Advances() {
               </select>
             </div>
 
-            <div className="farm-form-group">
-              <label className="farm-form-label">Year</label>
-              <input
-                className="farm-input"
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Year</label>
+              <Input
                 type="number"
-                value={form.year}
-                onChange={e => setForm({...form, year: e.target.value})}
+                value={filterYear}
+                onChange={(e) => setFilterYear(parseInt(e.target.value))}
                 min="2020"
                 max="2030"
-                required
               />
             </div>
+          </div>
+        </CardContent>
+      </Card>
 
-            <div className="farm-form-group">
-              <label className="farm-form-label">Date Given</label>
-              <input
-                className="farm-input"
-                type="date"
-                value={form.date}
-                onChange={e => setForm({...form, date: e.target.value})}
-              />
-            </div>
-
-            <div className="farm-form-group" style={{gridColumn: '1 / -1'}}>
-              <label className="farm-form-label">Notes (optional)</label>
-              <input
-                className="farm-input"
-                type="text"
-                placeholder="Add any notes about this advance..."
-                value={form.notes}
-                onChange={e => setForm({...form, notes: e.target.value})}
-              />
-            </div>
-
-            <div style={{gridColumn: '1 / -1'}}>
-              <button type="submit" className="farm-btn farm-btn-primary">
-                ➕ Record Advance
-              </button>
-            </div>
-          </form>
-        )}
+      {/* Summary Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Total Advances</div>
+            <div className="text-2xl font-bold text-foreground">{stats.count}</div>
+            <div className="text-xs text-muted-foreground">This period</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Total Amount</div>
+            <div className="text-2xl font-bold text-foreground">KES {stats.total.toFixed(2)}</div>
+            <div className="text-xs text-muted-foreground">All advances</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Pending</div>
+            <div className="text-2xl font-bold text-amber-600">KES {stats.pending.toFixed(2)}</div>
+            <div className="text-xs text-muted-foreground">Not yet deducted</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-sm font-medium text-muted-foreground">Deducted</div>
+            <div className="text-2xl font-bold text-green-600">KES {stats.deducted.toFixed(2)}</div>
+            <div className="text-xs text-muted-foreground">From payroll</div>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Add Advance Form */}
+      <Card>
+        <CardHeader>
+          <CardTitle>➕ Record Worker Advance</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {staff.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">👥</div>
+              <p className="text-muted-foreground">No tea plucking workers found.</p>
+              <p className="text-sm text-muted-foreground">Please add staff members with pay type "per_kilo" first.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Worker</label>
+                <select 
+                  className="w-full"
+                  value={form.worker_id} 
+                  onChange={e => setForm({...form, worker_id: e.target.value})}
+                  required
+                >
+                  <option value="">Select Worker</option>
+                  {staff.map(s => (
+                    <option key={s.id} value={s.id}>{s.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Amount (KES)</label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="Enter amount"
+                  value={form.amount}
+                  onChange={e => setForm({...form, amount: e.target.value})}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Deduct from Month</label>
+                <select 
+                  className="w-full"
+                  value={form.month}
+                  onChange={e => setForm({...form, month: e.target.value})}
+                  required
+                >
+                  {months.map((m, i) => (
+                    <option key={i} value={i + 1}>{m}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Year</label>
+                <Input
+                  type="number"
+                  value={form.year}
+                  onChange={e => setForm({...form, year: e.target.value})}
+                  min="2020"
+                  max="2030"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Date Given</label>
+                <Input
+                  type="date"
+                  value={form.date}
+                  onChange={e => setForm({...form, date: e.target.value})}
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-foreground mb-2">Notes (optional)</label>
+                <Input
+                  type="text"
+                  placeholder="Add any notes about this advance..."
+                  value={form.notes}
+                  onChange={e => setForm({...form, notes: e.target.value})}
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <Button type="submit" className="w-full">
+                  ➕ Record Advance
+                </Button>
+              </div>
+            </form>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Advances Table */}
-      <div className="farm-card">
-        <div className="farm-card-header">
-          <h2 className="farm-card-title">
+      <Card>
+        <CardHeader>
+          <CardTitle>
             📋 Advances for {months[filterMonth - 1]} {filterYear}
-          </h2>
-        </div>
-
-        {filteredAdvances.length === 0 ? (
-          <div className="farm-empty-state">
-            <div className="farm-empty-icon">💵</div>
-            <p>No advances for this period.</p>
-            <p>Record advances using the form above.</p>
-          </div>
-        ) : (
-          <div style={{overflowX: 'auto'}}>
-            <table className="farm-table">
-              <thead>
-                <tr>
-                  <th>Date Given</th>
-                  <th>Worker</th>
-                  <th>Amount</th>
-                  <th>Deduct From</th>
-                  <th>Status</th>
-                  <th>Notes</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredAdvances.map(a => (
-                  <tr key={a.id}>
-                    <td>{a.date ? new Date(a.date).toLocaleDateString() : 'N/A'}</td>
-                    <td><strong>{a.worker_name || `Worker #${a.worker_id}`}</strong></td>
-                    <td>
-                      <strong style={{color: 'var(--farm-brown)'}}>
-                        KES {a.amount?.toFixed(2) || 0}
-                      </strong>
-                    </td>
-                    <td>
-                      <span className="farm-badge farm-badge-info">
-                        {months[a.month - 1]} {a.year}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`farm-badge ${
-                        a.deducted ? 'farm-badge-success' : 'farm-badge-warning'
-                      }`}>
-                        {a.deducted ? '✓ Deducted' : 'Pending'}
-                      </span>
-                    </td>
-                    <td>{a.notes || '-'}</td>
-                    <td>
-                      {!a.deducted && (
-                        <button 
-                          onClick={() => handleDelete(a.id)}
-                          className="farm-btn farm-btn-danger"
-                          style={{padding: '0.3rem 0.6rem', fontSize: '0.85rem'}}
-                        >
-                          🗑️ Delete
-                        </button>
-                      )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {filteredAdvances.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">💵</div>
+              <p className="text-muted-foreground">No advances for this period.</p>
+              <p className="text-sm text-muted-foreground">Record advances using the form above.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2">Date Given</th>
+                    <th className="text-left p-2">Worker</th>
+                    <th className="text-left p-2">Amount</th>
+                    <th className="text-left p-2">Deduct From</th>
+                    <th className="text-left p-2">Status</th>
+                    <th className="text-left p-2">Notes</th>
+                    <th className="text-left p-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredAdvances.map(a => (
+                    <tr key={a.id} className="border-b">
+                      <td className="p-2">{a.date ? new Date(a.date).toLocaleDateString() : 'N/A'}</td>
+                      <td className="p-2"><strong>{a.worker_name || `Worker #${a.worker_id}`}</strong></td>
+                      <td className="p-2">
+                        <strong className="text-amber-600">
+                          KES {a.amount?.toFixed(2) || 0}
+                        </strong>
+                      </td>
+                      <td className="p-2">
+                        <Badge variant="secondary">
+                          {months[a.month - 1]} {a.year}
+                        </Badge>
+                      </td>
+                      <td className="p-2">
+                        <Badge variant={a.deducted ? "default" : "destructive"}>
+                          {a.deducted ? '✓ Deducted' : 'Pending'}
+                        </Badge>
+                      </td>
+                      <td className="p-2">{a.notes || '-'}</td>
+                      <td className="p-2">
+                        {!a.deducted && (
+                          <Button 
+                            onClick={() => handleDelete(a.id)}
+                            variant="destructive"
+                            size="sm"
+                          >
+                            🗑️ Delete
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="bg-muted font-bold">
+                  <tr>
+                    <td colSpan="2" className="p-2">TOTALS</td>
+                    <td className="p-2">KES {stats.total.toFixed(2)}</td>
+                    <td colSpan="4" className="p-2">
+                      Pending: KES {stats.pending.toFixed(2)} | 
+                      Deducted: KES {stats.deducted.toFixed(2)}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot style={{backgroundColor: 'var(--farm-cream)', fontWeight: 'bold'}}>
-                <tr>
-                  <td colSpan="2">TOTALS</td>
-                  <td>KES {stats.total.toFixed(2)}</td>
-                  <td colSpan="4">
-                    Pending: KES {stats.pending.toFixed(2)} | 
-                    Deducted: KES {stats.deducted.toFixed(2)}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        )}
-      </div>
+                </tfoot>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Information Box */}
-      <div className="farm-card" style={{background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)'}}>
-        <h3 style={{color: 'var(--farm-green)', marginBottom: '1rem'}}>ℹ️ How Worker Advances Work</h3>
-        <ul style={{paddingLeft: '1.5rem', lineHeight: '2'}}>
-          <li><strong>Recording:</strong> When you give a worker money during the month, record it as an advance</li>
-          <li><strong>Deduction Month:</strong> Specify which month's payroll the advance should be deducted from</li>
-          <li><strong>Automatic Deduction:</strong> When you calculate monthly payroll, all pending advances for that month are automatically deducted</li>
-          <li><strong>Status Tracking:</strong> System tracks which advances have been deducted and which are still pending</li>
-          <li><strong>Payroll Integration:</strong> Net pay = Gross earnings - Advances</li>
-        </ul>
-      </div>
+      <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950 dark:to-orange-950">
+        <CardContent className="p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">ℹ️ How Worker Advances Work</h3>
+          <ul className="space-y-2 pl-5">
+            <li><strong>Recording:</strong> When you give a worker money during the month, record it as an advance</li>
+            <li><strong>Deduction Month:</strong> Specify which month's payroll the advance should be deducted from</li>
+            <li><strong>Automatic Deduction:</strong> When you calculate monthly payroll, all pending advances for that month are automatically deducted</li>
+            <li><strong>Status Tracking:</strong> System tracks which advances have been deducted and which are still pending</li>
+            <li><strong>Payroll Integration:</strong> Net pay = Gross earnings - Advances</li>
+          </ul>
+        </CardContent>
+      </Card>
     </div>
   )
 }
